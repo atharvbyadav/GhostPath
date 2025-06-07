@@ -1,4 +1,4 @@
-## 🕵️‍♂️ GhostPath — Trace the Web's Forgotten Trails
+# 🕵️‍♂️ GhostPath — Trace the Web's Forgotten Trails
 
 GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
 
