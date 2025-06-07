@@ -1,70 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GhostPath - Passive Recon Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    /* Reset & Base */
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      background: #f9fafb;
-      color: #111827;
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      line-height: 1.6;
-    }
-    h1, h2, h3 {
-      color: #111827;
-      font-weight: 600;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-    }
-    a {
-      color: #2563eb;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    pre {
-      background: #1e293b;
-      color: #f8fafc;
-      padding: 1rem;
-      border-radius: 6px;
-      overflow-x: auto;
-      font-size: 0.9rem;
-    }
-    code {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.95rem;
-    }
-    blockquote {
-      border-left: 4px solid #2563eb;
-      padding-left: 1rem;
-      color: #374151;
-      font-style: italic;
-      margin: 1rem 0;
-      background: #e0e7ff;
-      border-radius: 4px;
-    }
-    img[alt*="badge"] {
-      vertical-align: middle;
-      margin: 0 0.2rem 0 0.2rem;
-    }
-    /* Center badges container */
-    p[align="center"] {
-      text-align: center;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
-  </style>
-</head>
-<body>
-
 <p align="center">
   <a href="#" target="_blank" rel="noopener">
     <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
@@ -208,7 +141,3 @@ Feel free to reach out via GitHub or open an issue for support.
 
 > “Reconnaissance is the foundation of a secure attack and an effective defense.”
 > — *Atharv Yadav*
-
-
-</body>
-</html>
