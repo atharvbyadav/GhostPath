@@ -48,6 +48,9 @@ Lightweight, fast, and modular, GhostPath helps you map your target’s web shad
 - 🛠️ **CLI Tool:** Simple command-line interface for quick scans.
 
 ---
+> “Reconnaissance is the foundation of a secure attack and an effective defense.”
+> — *Atharv Yadav*
+---
 
 ## 📦 Installation
 
@@ -122,12 +125,19 @@ This project is licensed under the **BSD 3-Clause License** — see the [LICENSE
 
 ---
 
-## 📫 Contact
+## 📬 Contact
 
-Created by [Atharv Yadav](https://github.com/atharvbyadav)
-Feel free to reach out via GitHub or open an issue for support.
+Have ideas, suggestions, or just want to connect?
+
+* 👨‍💻 Author: **Atharv Yadav**
+* 🌐 Website: [atharvbyadav.github.io](https://atharvbyadav.github.io)
+* 🐙 GitHub: [@atharvbyadav](https://github.com/atharvbyadav)
+* 📫 Email: [atharvopensource@gmail.com](mailto:atharvopensource@gmail.com)
+* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharv-yadav/) · [Twitter](https://twitter.com/atharvbyadav)
+
+> *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
 
 ---
 
-> “Reconnaissance is the foundation of a secure attack and an effective defense.”
-> — *Atharv Yadav*
+
+
