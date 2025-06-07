@@ -132,7 +132,7 @@ Have ideas, suggestions, or just want to connect?
 * 👨‍💻 Author: **Atharv Yadav**
 * 🌐 Website: [atharvbyadav.github.io](https://atharvbyadav.github.io)
 * 🐙 GitHub: [@atharvbyadav](https://github.com/atharvbyadav)
-* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [Twitter](https://x.com/AtharvYadavB)
+* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
 
 > *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
 
