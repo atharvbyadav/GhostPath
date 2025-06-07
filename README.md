@@ -133,7 +133,7 @@ Have ideas, suggestions, or just want to connect?
 * 🌐 Website: [atharvbyadav.github.io](https://atharvbyadav.github.io)
 * 🐙 GitHub: [@atharvbyadav](https://github.com/atharvbyadav)
 * 📫 Email: [atharvopensource@gmail.com](mailto:atharvopensource@gmail.com)
-* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharv-yadav/) · [Twitter](https://twitter.com/atharvbyadav)
+* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [Twitter](https://x.com/AtharvYadavB)
 
 > *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
 
