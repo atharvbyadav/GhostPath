@@ -1,48 +1,38 @@
-<p align="center">
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Subdomain Enumeration" src="https://img.shields.io/badge/Subdomain_Enumeration-✔️-blue?style=for-the-badge" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Historical URL Discovery" src="https://img.shields.io/badge/Historical_URL_Discovery-✔️-orange?style=for-the-badge" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="No API Keys Required" src="https://img.shields.io/badge/No_API_Keys_Required-✔️-lightgrey?style=for-the-badge" />
-  </a>
-  <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">
-    <img alt="Python Version" src="https://img.shields.io/badge/Python-3.7%2B-blue.svg?style=for-the-badge&logo=python" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Supported OS" src="https://img.shields.io/badge/OS-Linux%20|%20macOS%20|%20Windows-lightgrey.svg?style=for-the-badge" />
-  </a>
-  <a href="https://opensource.org/licenses/BSD-3-Clause" target="_blank" rel="noopener">
-    <img alt="License: BSD 3-Clause" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" />
-  </a>
-</p>
-<p align="center">
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Open Source" src="https://img.shields.io/badge/Open_Source-Yes-green?style=for-the-badge" />
-  </a>
-  <a href="https://github.com/atharvbyadav/GhostPath/commits/main" target="_blank" rel="noopener">
-    <img alt="Last Commit" src="https://img.shields.io/github/last-commit/atharvbyadav/GhostPath.svg?style=for-the-badge" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintenance-Active-brightgreen.svg?style=for-the-badge" />
-  </a>
-  <a href="#" target="_blank" rel="noopener">
-    <img alt="Build Status" src="https://img.shields.io/badge/build-passing-brightgreen.svg?style=for-the-badge&logo=githubactions" />
-  </a>
-</p>
+## 🕵️‍♂️ GhostPath — Trace the Web's Forgotten Trails
+
+GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
+
+Designed for **ethical hackers, bug bounty hunters, and red teams**, GhostPath reveals historical URLs, forgotten subdomains, and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
+
+Lightweight, fast, and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
 
 ---
 
-# 👻 GhostPath
+### 🧩 Capabilities at a Glance
 
-GhostPath is a **powerful passive reconnaissance tool** designed for cybersecurity professionals, bug bounty hunters, and penetration testers. It automates the discovery of historical URLs and subdomains from publicly available sources without requiring any API keys or credentials.
-
-By aggregating data from various passive sources, GhostPath helps you map out the attack surface of your targets with ease.
+<p align="center">
+  <a href="#">
+    <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
+  </a>
+  <a href="#">
+    <img alt="Subdomain Enumeration" src="https://img.shields.io/badge/Subdomain_Enumeration-✔️-blue?style=for-the-badge" />
+  </a>
+  <a href="#">
+    <img alt="Historical URL Discovery" src="https://img.shields.io/badge/Historical_URL_Discovery-✔️-orange?style=for-the-badge" />
+  </a>
+  <a href="#">
+    <img alt="No API Keys Required" src="https://img.shields.io/badge/No_API_Keys_Required-✔️-lightgrey?style=for-the-badge" />
+  </a>
+  <a href="https://www.python.org/downloads/">
+    <img alt="Python 3.7+" src="https://img.shields.io/badge/Python-3.7+-blue.svg?style=for-the-badge&logo=python" />
+  </a>
+  <a href="#">
+    <img alt="Supported OS" src="https://img.shields.io/badge/OS-Linux%20|%20macOS%20|%20Windows-lightgrey.svg?style=for-the-badge" />
+  </a>
+  <a href="https://opensource.org/licenses/BSD-3-Clause">
+    <img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" />
+  </a>
+</p>
 
 ---
 
