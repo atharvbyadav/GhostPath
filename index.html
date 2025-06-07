@@ -1,156 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GhostPath - Passive Recon Tool</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GhostPath</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+  /* Dark theme base */
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600&display=swap');
+
+  :root {
+    --bg-color: #121217;
+    --text-color: #e0e0e0;
+    --heading-color: #80c1ff;
+    --accent-color: #4fc3f7;
+    --accent-color-2: #ffab40;
+    --blockquote-bg: #1f2937;
+    --blockquote-border: #4fc3f7;
+    --code-bg: #1e1e2f;
+    --link-color: #4fc3f7;
+    --link-hover: #82d8ff;
+    --hr-color: #2e2e3e;
+    --badge-margin: 0 0.5rem 0.7rem 0.5rem;
+  }
+
+  body {
+    margin: 0;
+    padding: 1rem 1.5rem 3rem;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+      Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: var(--heading-color);
+    margin-top: 2rem;
+    text-align: center;
+    user-select: none;
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 1.9rem;
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.4rem;
+    margin-top: 3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    color: var(--accent-color-2);
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  ul, ol {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    background-color: var(--code-bg);
+    color: #ffd966;
+    padding: 0.15em 0.3em;
+    border-radius: 4px;
+    font-size: 0.95rem;
+  }
+
+  pre {
+    background-color: var(--code-bg);
+    color: var(--text-color);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.3);
+    margin-bottom: 2rem;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--hr-color);
+    margin: 3rem 0;
+  }
+
+  blockquote {
+    background-color: var(--blockquote-bg);
+    border-left: 6px solid var(--blockquote-border);
+    padding: 1rem 1.5rem;
+    font-style: italic;
+    color: #a0aec0;
+    margin: 2rem 0;
+    border-radius: 6px;
+  }
+
+  .badges {
+    text-align: center;
+    margin: 1.5rem 0 3rem 0;
+  }
+
+  .badges a {
+    display: inline-block;
+    margin: var(--badge-margin);
+    line-height: normal;
+  }
+
+  .contact {
+    margin-top: 3rem;
+    padding: 1.8rem 2rem;
+    background-color: #1f2937;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(79, 195, 247, 0.4);
+  }
+
+  .contact p {
+    margin: 0.3rem 0;
+  }
+
+  .contact a {
+    margin: 0 0.8rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
     body {
-      font-family: 'Fira Code', monospace;
-      background-color: #0d1117;
-      color: #c9d1d9;
-      padding: 2rem;
-    }
-    h1, h2, h3 {
-      color: #58a6ff;
-    }
-    .badge-section img {
-      margin: 0.2rem;
-    }
-    pre, code {
-      background-color: #161b22;
       padding: 1rem;
-      border-radius: 0.5rem;
-      display: block;
-      overflow-x: auto;
-      margin-bottom: 1rem;
     }
-    blockquote {
-      border-left: 4px solid #30363d;
-      padding-left: 1rem;
-      color: #8b949e;
-      font-style: italic;
+    h1 {
+      font-size: 2rem;
     }
-    hr {
-      border-color: #21262d;
+    h2 {
+      font-size: 1.5rem;
     }
-    a {
-      color: #58a6ff;
-      text-decoration: none;
+    h3 {
+      font-size: 1.1rem;
     }
-    a:hover {
-      text-decoration: underline;
+    pre {
+      font-size: 0.85rem;
     }
-    .contact a {
-      display: inline-block;
-      margin-right: 1rem;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <h1>🕵️‍♂️ GhostPath &mdash; Trace the Web's Forgotten Trails</h1>
-  <p>GhostPath is your <strong>silent recon companion</strong> &mdash; a <strong>powerful, passive reconnaissance toolkit</strong> that unearths forgotten traces of a target domain without making a sound.</p>
-  <p>Designed for <strong>ethical hackers, bug bounty hunters, and red teams</strong>, GhostPath reveals historical URLs, forgotten subdomains, and digital footprints using only <strong>open-source intelligence (OSINT)</strong> techniques &mdash; <strong>no API keys required, no noise generated</strong>.</p>
-  <p>Lightweight, fast, and modular, GhostPath helps you map your target’s web shadow &mdash; all with just a single command.</p>
+
+  <h1><i class="fas fa-user-secret" aria-hidden="true"></i> GhostPath — Trace the Web's Forgotten Trails</h1>
+
+  <p>
+    GhostPath is your <strong>silent recon companion</strong> — a <strong>powerful, passive reconnaissance toolkit</strong> 
+    that unearths forgotten traces of a target domain without making a sound.
+  </p>
+  <p>
+    Designed for <strong>ethical hackers, bug bounty hunters, and red teams</strong>, GhostPath reveals historical URLs, forgotten subdomains, and digital footprints using only 
+    <strong>open-source intelligence (OSINT)</strong> techniques — <strong>no API keys required, no noise generated</strong>.
+  </p>
+  <p>
+    Lightweight, fast, and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
+  </p>
 
   <hr />
-  <h3>🧹 Capabilities at a Glance</h3>
-  <div class="badge-section">
-    <img src="https://img.shields.io/badge/Passive_Recon-✔%ef%b8%8f-brightgreen?style=for-the-badge" alt="Passive Recon">
-    <img src="https://img.shields.io/badge/Subdomain_Enumeration-✔%ef%b8%8f-blue?style=for-the-badge" alt="Subdomain Enumeration">
-    <img src="https://img.shields.io/badge/Historical_URL_Discovery-✔%ef%b8%8f-orange?style=for-the-badge" alt="Historical URL Discovery">
-    <img src="https://img.shields.io/badge/No_API_Keys_Required-✔%ef%b8%8f-lightgrey?style=for-the-badge" alt="No API Keys Required">
-    <img src="https://img.shields.io/badge/Python-3.7+-blue.svg?style=for-the-badge&logo=python" alt="Python 3.7+">
-    <img src="https://img.shields.io/badge/OS-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg?style=for-the-badge" alt="Supported OS">
-    <img src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" alt="License">
+
+  <h2><i class="fas fa-puzzle-piece"></i> Capabilities at a Glance</h2>
+  <div class="badges" aria-label="Capabilities Badges">
+    <a href="#" title="Passive Recon">
+      <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
+    </a>
+    <a href="#" title="Subdomain Enumeration">
+      <img alt="Subdomain Enumeration" src="https://img.shields.io/badge/Subdomain_Enumeration-✔️-blue?style=for-the-badge" />
+    </a>
+    <a href="#" title="Historical URL Discovery">
+      <img alt="Historical URL Discovery" src="https://img.shields.io/badge/Historical_URL_Discovery-✔️-orange?style=for-the-badge" />
+    </a>
+    <a href="#" title="No API Keys Required">
+      <img alt="No API Keys Required" src="https://img.shields.io/badge/No_API_Keys_Required-✔️-lightgrey?style=for-the-badge" />
+    </a>
+    <a href="https://www.python.org/downloads/" title="Python 3.7+">
+      <img alt="Python 3.7+" src="https://img.shields.io/badge/Python-3.7+-blue.svg?style=for-the-badge&logo=python" />
+    </a>
+    <a href="#" title="Supported OS">
+      <img alt="Supported OS" src="https://img.shields.io/badge/OS-Linux%20|%20macOS%20|%20Windows-lightgrey.svg?style=for-the-badge" />
+    </a>
+    <a href="https://opensource.org/licenses/BSD-3-Clause" title="License">
+      <img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" />
+    </a>
   </div>
 
   <hr />
-  <h2>🚀 Features</h2>
+
+  <h2><i class="fas fa-rocket" aria-hidden="true"></i> Features</h2>
   <ul>
-    <li>🔍 <strong>Passive Reconnaissance</strong> &mdash; No direct interaction with targets.</li>
-    <li>🌐 <strong>Subdomain Enumeration</strong> &mdash; Discover via multiple OSINT sources.</li>
-    <li>📜 <strong>Historical URL Discovery</strong> &mdash; Archive mining (Wayback, etc.).</li>
-    <li>🔑 <strong>No API Keys Required</strong> &mdash; Plug and play.</li>
-    <li>🧹 <strong>Deduplication</strong> &mdash; Cleans repeated data.</li>
-    <li>📦 <strong>Modular Architecture</strong> &mdash; Easy to extend.</li>
-    <li>🐍 <strong>Python 3.7+</strong> &mdash; Works cross-platform.</li>
-    <li>🛠️ <strong>CLI Tool</strong> &mdash; Simple and fast usage.</li>
+    <li><i class="fas fa-magnifying-glass" aria-hidden="true"></i> <strong>Passive Reconnaissance:</strong> Gather intelligence without direct interaction with the target.</li>
+    <li><i class="fas fa-globe" aria-hidden="true"></i> <strong>Subdomain Enumeration:</strong> Discover subdomains via multiple sources and APIs.</li>
+    <li><i class="fas fa-scroll" aria-hidden="true"></i> <strong>Historical URL Discovery:</strong> Fetch archived URLs from Wayback Machine and others.</li>
+    <li><i class="fas fa-key" aria-hidden="true"></i> <strong>No API Keys Required:</strong> Ready-to-use without any setup hassle.</li>
+    <li><i class="fas fa-broom" aria-hidden="true"></i> <strong>Deduplication:</strong> Removes duplicate URLs and subdomains for clean output.</li>
+    <li><i class="fas fa-box" aria-hidden="true"></i> <strong>Modular Architecture:</strong> Easily extendable with fetchers and utilities.</li>
+    <li><i class="fab fa-python" aria-hidden="true"></i> <strong>Python 3.7+ Compatible:</strong> Works on all major OS (Linux, macOS, Windows).</li>
+    <li><i class="fas fa-tools" aria-hidden="true"></i> <strong>CLI Tool:</strong> Simple command-line interface for quick scans.</li>
   </ul>
 
   <blockquote>
-    “Reconnaissance is the foundation of a secure attack and an effective defense.”  — <em>Atharv Yadav</em>
+    “Reconnaissance is the foundation of a secure attack and an effective defense.”<br />
+    — <em>Atharv Yadav</em>
   </blockquote>
 
   <hr />
-  <h2>📦 Installation</h2>
+
+  <h2><i class="fas fa-box" aria-hidden="true"></i> Installation</h2>
   <pre><code># Clone the repository
 git clone https://github.com/atharvbyadav/GhostPath.git
 cd GhostPath
 
 # (Optional) Create and activate a virtual environment
 python3 -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate   # On Windows: venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt</code></pre>
+pip install -r requirements.txt
+</code></pre>
 
   <hr />
-  <h2>⚙️ Usage</h2>
-  <pre><code>python main.py --domain example.com</code></pre>
+
+  <h2><i class="fas fa-cog" aria-hidden="true"></i> Usage</h2>
+  <pre><code>python main.py --domain example.com
+</code></pre>
   <p>Replace <code>example.com</code> with your target domain.</p>
-  <h4>Options</h4>
+
+  <h3>Options</h3>
   <ul>
-    <li><code>--domain</code> : Target domain</li>
-    <li><code>--output</code> : (Optional) Save to file</li>
-    <li><code>--verbose</code>: Enable detailed output</li>
+    <li><code>--domain</code> : Specify the target domain for reconnaissance.</li>
+    <li><code>--output</code> : (Optional) Specify a file to save the results.</li>
+    <li><code>--verbose</code>: Enable detailed output.</li>
   </ul>
-  <p>For all options:</p>
-  <pre><code>python main.py --help</code></pre>
+  <p><em>For full options, run:</em></p>
+  <pre><code>python main.py --help
+</code></pre>
 
   <hr />
-  <h2>📂 Project Structure</h2>
+
+  <h2><i class="fas fa-folder" aria-hidden="true"></i> Project Structure</h2>
   <pre><code>GhostPath/
-├── fetchers/          # Modules to fetch data from passive sources
-│   ├── subdomains.py  # Subdomain logic
-│   └── wayback.py     # Historical URLs
-├── utils/             # Utility modules
-│   └── dedup.py       # Deduplication
-├── main.py            # CLI entry
-├── requirements.txt   # Dependencies
-└── README.md          # Docs</code></pre>
+├── fetchers/          # Modules to fetch data from different passive sources
+│   ├── subdomains.py  # Subdomain enumeration logic
+│   └── wayback.py     # Historical URL discovery from Wayback Machine
+├── utils/             # Utility modules for deduplication, parsing, etc.
+│   └── dedup.py       # Deduplication functions
+├── main.py            # Main CLI entry point
+├── requirements.txt   # Python dependencies
+└── README.md          # Project documentation
+</code></pre>
 
   <hr />
-  <h2>🤝 Contributing</h2>
-  <p>Contributions are welcome!</p>
+
+  <h2><i class="fas fa-handshake" aria-hidden="true"></i> Contributing</h2>
+  <p>Contributions are welcome! Please open issues or pull requests for bugs, improvements, or new fetchers.</p>
   <ol>
     <li>Fork the repo</li>
-    <li>Create a feature branch: <code>git checkout -b feature-name</code></li>
-    <li>Commit changes: <code>git commit -m 'Add feature'</code></li>
-    <li>Push: <code>git push origin feature-name</code></li>
+    <li>Create a feature branch (<code>git checkout -b feature-name</code>)</li>
+    <li>Commit your changes (<code>git commit -m 'Add some feature'</code>)</li>
+    <li>Push to your branch (<code>git push origin feature-name</code>)</li>
     <li>Open a Pull Request</li>
   </ol>
 
   <hr />
-  <h2>📜 License</h2>
-  <p>This project is licensed under the <strong>BSD 3-Clause License</strong>.<br />See the <a href="LICENSE">LICENSE</a> file for details.</p>
+
+  <h2><i class="fas fa-scroll" aria-hidden="true"></i> License</h2>
+  <p>This project is licensed under the <strong>BSD 3-Clause License</strong> — see the <a href="LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a> file for details.</p>
 
   <hr />
-  <h2>📩 Contact</h2>
-  <div class="contact">
-    <p>Have ideas, feedback, or want to connect?</p>
-    <p>
-      👨‍💻 Author: <strong>Atharv Yadav</strong><br />
-      🌐 Website: <a href="https://atharvbyadav.github.io">atharvbyadav.github.io</a><br />
-      🔍 GitHub: <a href="https://github.com/atharvbyadav">@atharvbyadav</a><br />
-      🧐 LinkedIn: <a href="https://www.linkedin.com/in/atharvbyadav/">/in/atharvbyadav</a><br />
-      🕊️ Twitter: <a href="https://x.com/AtharvYadavB">@AtharvYadavB</a>
-    </p>
-  </div>
-  <blockquote>
-    <em>Collaboration is the backbone of innovation. Let’s build better tools together.</em>
-  </blockquote>
+
+  <h2><i class="fas fa-envelope" aria-hidden="true"></i> Contact</h2>
+<div
+  class="contact"
+  role="contentinfo"
+  aria-label="Contact Information"
+  style="
+    padding: 2rem;
+    background: #1e2a38;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(79, 195, 247, 0.35);
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto;
+  "
+>
+  <p
+    style="
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+      color: var(--accent-color);
+    "
+  >
+    Author: <span style="color: var(--text-color);">Atharv Yadav</span>
+  </p>
+  <p
+    style="
+      margin: 1rem 0;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.4rem;
+      flex-wrap: wrap;
+    "
+  >
+    <a
+      href="https://atharvbyadav.github.io"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color: var(--link-color);
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s;
+      "
+    >
+      <i class="fas fa-globe"></i> Portfolio
+    </a>
+    <a
+      href="https://github.com/atharvbyadav"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color: var(--link-color);
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s;
+      "
+    >
+      <i class="fab fa-github"></i> GitHub
+    </a>
+    <a
+      href="https://www.linkedin.com/in/atharvbyadav/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style="
+        color: var(--link-color);
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s;
+      "
+    >
+      <i class="fab fa-linkedin"></i> LinkedIn
+    </a>
+    <a
+  href="https://x.com/AtharvYadavB"
+  target="_blank"
+  rel="noopener noreferrer"
+  style="
+    color: var(--link-color);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s;
+  "
+>
+  <i class="fab fa-twitter"></i>/ X.com
+</a>
+  </p>
+  <p
+    style="
+      font-style: italic;
+      color: #9aa4b1;
+      font-size: 1rem;
+      margin-top: 1.8rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    Collaboration is the backbone of innovation. Reach out — let’s build better
+    tools together.
+  </p>
+</div>
+
 </body>
 </html>
