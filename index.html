@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GhostPath</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
   /* Dark theme base */
@@ -97,6 +97,19 @@
     border-radius: 4px;
     font-size: 0.95rem;
   }
+  
+  .highlight-paragraph {
+    font-weight: 600;
+    color: var(--accent-color-light);
+    text-align: center;
+    font-size: 1.1rem;
+    margin: 1.5rem 0;
+    padding: 0.7rem 1.2rem;
+    background-color: rgba(79, 195, 247, 0.08);
+    border-radius: 6px;
+    border: 1px solid rgba(79, 195, 247, 0.15);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  }
 
   pre {
     background-color: var(--code-bg);
@@ -168,6 +181,10 @@
     h3 {
       font-size: 1.1rem;
     }
+	.highlight-paragraph {
+      font-size: 1rem;
+      padding: 0.5rem 0.8rem;
+    }
     pre {
       font-size: 0.85rem;
     }
@@ -183,9 +200,9 @@
   </p>
   <p>
   Crafted especially for <strong>ethical hackers, bug bounty hunters, and red teams</strong>, GhostPath digs deep to expose historical URLs, shadowy subdomains, and elusive digital traces — leveraging only <strong>open-source intelligence (OSINT)</strong> methods.
+  <p class="highlight-paragraph">
+  Best of all? No API keys, no noisy scans, just pure silent discovery.
   </p>
-  <strong>Best of all? No API keys, no noisy scans, just pure silent discovery.</strong>
-  <p>
   Fast, lightweight, and modular, GhostPath empowers you to illuminate your target’s hidden web presence with a single command — transforming reconnaissance into an art of subtle mastery.
   </p>
 
@@ -220,7 +237,7 @@
   <hr />
 
   <h2><i class="fas fa-rocket" aria-hidden="true"></i> Features</h2>
-  <ul>
+  <ul>  
     <li><i class="fas fa-magnifying-glass" aria-hidden="true"></i> <strong>Passive Reconnaissance:</strong> Gather intelligence without direct interaction with the target. <a href="https://en.wikipedia.org/wiki/Passive_reconnaissance" target="_blank" rel="noopener noreferrer">(Learn more)</a></li>
     <li><i class="fas fa-globe" aria-hidden="true"></i> <strong>Subdomain Enumeration:</strong> Discover subdomains via multiple sources and APIs. <a href="https://owasp.org/www-community/attacks/Subdomain_Enumeration" target="_blank" rel="noopener noreferrer">(Details)</a></li>
     <li><i class="fas fa-scroll" aria-hidden="true"></i> <strong>Historical URL Discovery:</strong> Fetch archived URLs from <a href="https://archive.org/web/" target="_blank" rel="noopener noreferrer">Wayback Machine</a> and others.</li>
@@ -238,7 +255,7 @@
 
   <hr />
 
-  <h2><i class="fas fa-box" aria-hidden="true"></i> Installation</h2>
+  <h2><i class="fas fa-box-open" aria-hidden="true"></i> Installation</h2>
   <pre><code># Clone the repository
 git clone https://github.com/atharvbyadav/GhostPath.git
 cd GhostPath
@@ -253,12 +270,12 @@ pip install -r requirements.txt
 
   <hr />
 
-  <h2><i class="fas fa-cog" aria-hidden="true"></i> Usage</h2>
+  <h2><i class="fas fa-terminal" aria-hidden="true"></i> Usage</h2>
   <pre><code>python main.py --domain example.com
 </code></pre>
   <p>Replace <code>example.com</code> with your target domain.</p>
 
-  <h3>Options</h3>
+  <h3><i class="fas fa-cogs"></i> Options</h3>
   <ul>
     <li><code>--domain</code> : Specify the target domain for reconnaissance.</li>
     <li><code>--output</code> : (Optional) Specify a file to save the results.</li>
@@ -270,7 +287,7 @@ pip install -r requirements.txt
 
   <hr />
 
-  <h2><i class="fas fa-folder" aria-hidden="true"></i> Project Structure</h2>
+  <h2><i class="fas fa-folder-tree" aria-hidden="true"></i> Project Structure</h2>
   <pre><code>GhostPath/
 ├── fetchers/          # Modules to fetch data from different passive sources
 │   ├── subdomains.py  # Subdomain enumeration logic
@@ -296,26 +313,25 @@ pip install -r requirements.txt
 
   <hr />
 
-  <h2><i class="fas fa-scroll" aria-hidden="true"></i> License</h2>
+  <h2><i class="fas fa-file-contract" aria-hidden="true"></i> License</h2>
   <p>This project is licensed under the <strong>BSD 3-Clause License</strong> — see the <a href="https://github.com/atharvbyadav/GhostPath/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a> file for details.</p>
 
   <hr />
-
-  <h2><i class="fas fa-envelope" aria-hidden="true"></i> Contact</h2>
-<div
-  class="contact"
-  role="contentinfo"
-  aria-label="Contact Information"
-  style="
-    padding: 2rem;
-    background: #1e2a38;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(79, 195, 247, 0.35);
-    text-align: center;
-    max-width: 600px;
-    margin: 2rem auto;
-  "
->
+  
+  <div
+    class="contact"
+    role="contentinfo"
+    aria-label="Contact Information"
+    style="
+      padding: 2rem;
+      background: #1e2a38;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(79, 195, 247, 0.35);
+      text-align: center;
+      max-width: 600px;
+      margin: 2rem auto;
+    "
+  >
   <p
     style="
       font-weight: 600;
@@ -324,6 +340,18 @@ pip install -r requirements.txt
       color: var(--accent-color);
     "
   >
+    <i class="fas fa-envelope" aria-hidden="true" style="font-size: 1.1rem;"></i>
+    <span>Let’s Get in Touch</span>
+  </p>
+  <p
+    style="
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+      color: var(--accent-color);
+    "
+  >
+    
     Author: <span style="color: var(--text-color);">Atharv Yadav</span>
   </p>
   <p
