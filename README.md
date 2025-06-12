@@ -129,10 +129,12 @@ This project is licensed under the **BSD 3-Clause License** — see the [LICENSE
 
 Have ideas, suggestions, or just want to connect?
 
-* 👨‍💻 Author: **Atharv Yadav**
-* 🌐 Website: [atharvbyadav.github.io](https://atharvbyadav.github.io)
-* 🐙 GitHub: [@atharvbyadav](https://github.com/atharvbyadav)
-* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
+- **👨‍💻 Author**: **Atharv Yadav**
+- **📧 Email**: [uuwr5t1s@duck.com](mailto:uuwr5t1s@duck.com)  
+  _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_
+- **🌐 Website**: [atharvbyadav.github.io](https://atharvbyadav.github.io)
+- **🐙 GitHub**: [@atharvbyadav](https://github.com/atharvbyadav)
+- **🧠 Connect**: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
 
 > *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
 
