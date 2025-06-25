@@ -2,9 +2,9 @@
 
 GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
 
-Designed for **ethical hackers, bug bounty hunters, and red teams**, GhostPath reveals historical URLs, forgotten subdomains, and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
+Designed for **ethical hackers, bug bounty hunters and red teams**, GhostPath reveals historical URLs, forgotten subdomains and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
 
-Lightweight, fast, and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
+Lightweight, fast and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
 
 ---
 
@@ -109,7 +109,7 @@ GhostPath/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please open issues or pull requests for bugs, improvements, or new fetchers.
+Contributions are welcome! Please open issues or pull requests for bugs, improvements or new fetchers.
 
 1. Fork the repo
 2. Create a feature branch (`git checkout -b feature-name`)
