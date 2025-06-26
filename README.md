@@ -2,9 +2,9 @@
 
 GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
 
-Designed for **ethical hackers, bug bounty hunters, and red teams**, GhostPath reveals historical URLs, forgotten subdomains, and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
+Designed for **ethical hackers, bug bounty hunters and red teams**, GhostPath reveals historical URLs, forgotten subdomains and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
 
-Lightweight, fast, and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
+Lightweight, fast and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
 
 ---
 
@@ -109,7 +109,7 @@ GhostPath/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please open issues or pull requests for bugs, improvements, or new fetchers.
+Contributions are welcome! Please open issues or pull requests for bugs, improvements or new fetchers.
 
 1. Fork the repo
 2. Create a feature branch (`git checkout -b feature-name`)
@@ -129,14 +129,13 @@ This project is licensed under the **BSD 3-Clause License** — see the [LICENSE
 
 Have ideas, suggestions, or just want to connect?
 
-* 👨‍💻 Author: **Atharv Yadav**
-* 🌐 Website: [atharvbyadav.github.io](https://atharvbyadav.github.io)
-* 🐙 GitHub: [@atharvbyadav](https://github.com/atharvbyadav)
-* 🧠 Connect: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
+- **👨‍💻 Author**: **Atharv Yadav**
+- **📧 Email**: [uuwr5t1s@duck.com](mailto:uuwr5t1s@duck.com)  
+  _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_
+- **🌐 Website**: [atharvbyadav.github.io](https://atharvbyadav.github.io)
+- **🐙 GitHub**: [@atharvbyadav](https://github.com/atharvbyadav)
+- **🧠 Connect**: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
 
 > *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
 
 ---
-
-
-
