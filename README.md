@@ -9,12 +9,19 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 ## 🚀 Why GhostPath?
 
 ✅ Modular Architecture
+
 ✅ Multi-source Historical URL Collection (Wayback, URLScan, CommonCrawl)
+
 ✅ Certificate-based Subdomain Enumeration (crt.sh)
+
 ✅ Active Path Probing with Wordlists
+
 ✅ Customizable Output Formats (TXT, JSON, CSV)
+
 ✅ Built-in Retry Handling for Network Stability    
+
 ✅ Debug Mode for Verbose Output
+
 ✅ Future-Ready for Additional Recon Modules
 
 ---
