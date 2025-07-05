@@ -192,10 +192,10 @@ python3 ghostpath/main.py pathprobe --target https://example.com --wordlist word
 
 GhostPath includes a powerful `--debug` flag for **any module**, giving you:
 
-✅ Full API endpoints and request parameters
-✅ HTTP status codes and responses
-✅ Retry attempt details
-✅ Internal decision logs
+- ✅ Full API endpoints and request parameters
+- ✅ HTTP status codes and responses
+- ✅ Retry attempt details
+- ✅ Internal decision logs
 
 **Example:**
 
