@@ -1,0 +1,20 @@
+# Core HTTP and API handling
+requests>=2.31.0
+
+# Optional: For colored CLI output (when you add it later)
+colorama>=0.4.6
+
+# Optional: For fancier CLI output and rich text (future proof)
+rich>=13.7.0
+
+# Optional: For better CSV/JSON handling, though built-in modules are enough
+pandas>=2.2.2
+
+# Optional: Multithreading/threadpools
+tqdm>=4.66.2
+
+# Optional: For unit testing (future tests folder)
+pytest>=8.2.1
+
+# Python version constraint (if needed)
+# python_version >= "3.8"

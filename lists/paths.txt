@@ -1,0 +1,4 @@
+admin
+login
+uploads
+dashboard
