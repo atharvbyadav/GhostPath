@@ -16,8 +16,9 @@
 </p>
 
 <p align="center">
-  <em>A modular, powerful, and fully open-source web reconnaissance toolkit built for <strong>ethical hackers</strong>, <strong>OSINT analysts</strong>, and <strong>security researchers</strong>.</em>
+  <em>A modular, powerful, and fully open-source web reconnaissance toolkit built for <strong>ethical hackers</strong>, <strong>OSINT analysts</strong> and <strong>security researchers</strong>.</em>
 </p>
+
 With **GhostPath**, you can **dig through historical URLs**, **hunt down forgotten directories** and **enumerate subdomains from public certificate logs**, all from a single, intuitive CLI interface.
 
 ---
