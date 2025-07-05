@@ -25,6 +25,7 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 
 ## 🚀 Why GhostPath?
 
+✅ Built from scratch — 100% unique, no forks, no clones
 ✅ Modular architecture (passive and active modules)
 ✅ Multi-source passive recon (Wayback, URLScan, Common Crawl)
 ✅ Active directory brute-forcing with multithreading
