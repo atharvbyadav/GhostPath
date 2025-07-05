@@ -25,6 +25,7 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 
 ## 🚀 Why GhostPath?
 
+
 ✅ 100% original codebase — no forks, no clones, no dependencies.
 ✅ Modular structure with clean separation of passive and active modes.
 ✅ Fetches intel from multiple OSINT sources like Wayback, URLScan, and Common Crawl.
