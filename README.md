@@ -1,6 +1,6 @@
 # 👻 GhostPath — Uncover The Web's Hidden Trails
 
-**GhostPath** is a modular, CLI-based web reconnaissance toolkit for discovering hidden paths, historical URLs and subdomains. Designed for ethical hackers, OSINT analysts and bug bounty hunters, it offers both passive data scraping and active directory brute-forcing, all in one tool.
+A modular, powerful and fully open-source web reconnaissance toolkit built for **ethical hackers**, **OSINT analysts** and **security researchers**.
 
 With **GhostPath**, you can **dig through historical URLs**, **hunt down forgotten directories** and **enumerate subdomains from public certificate logs**, all from a single, intuitive CLI interface.
 
@@ -8,14 +8,12 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 
 ## 🚀 Why GhostPath?
 
-✅ Modular Architecture
-✅ Multi-source Historical URL Collection (Wayback, URLScan, CommonCrawl)
-✅ Certificate-based Subdomain Enumeration (crt.sh)
-✅ Active Path Probing with Wordlists
-✅ Customizable Output Formats (TXT, JSON, CSV)
-✅ Built-in Retry Handling for Network Stability    
-✅ Debug Mode for Verbose Output
-✅ Future-Ready for Additional Recon Modules
+✅ Modular architecture (passive and active modules)
+✅ Multi-source passive recon (Wayback, URLScan, Common Crawl)
+✅ Active directory brute-forcing with multithreading
+✅ Robust retry handling and error resilience
+✅ Debug mode for verbose internal logs
+✅ Designed for both learning and professional use
 
 ---
 
@@ -86,7 +84,7 @@ python3 ghostpath/main.py timetrail --target <domain> --source <wayback|urlscan|
 | `--target` | Target domain (e.g., `example.com`)              |
 | `--source` | Data source: `wayback`, `urlscan`, `commoncrawl` |
 | `--output` | Save results to a file                           |
-| `--format` | Output format: `txt`, `json` or `csv`           |
+| `--format` | Output format: `txt`, `json` or `csv`            |
 | `--debug`  | Enable verbose debug output                      |
 
 **Example:**
@@ -113,7 +111,7 @@ python3 ghostpath/main.py certtrack --target <domain> [options]
 | ---------- | -------------------------------------- |
 | `--target` | Target domain (e.g., `example.com`)    |
 | `--output` | Save results to a file                 |
-| `--format` | Output format: `txt`, `json` or `csv` |
+| `--format` | Output format: `txt`, `json` or `csv`  |
 | `--debug`  | Enable debug output                    |
 
 **Example:**
@@ -143,7 +141,7 @@ python3 ghostpath/main.py pathprobe --target <url> --wordlist <file> [options]
 | `--status`   | HTTP status codes to match (default: `200 301 302`) |
 | `--threads`  | Number of concurrent threads (default: 10)          |
 | `--output`   | Save results to a file                              |
-| `--format`   | Output format: `txt`, `json` or `csv`              |
+| `--format`   | Output format: `txt`, `json` or `csv`               |
 | `--debug`    | Enable verbose output                               |
 
 **Example:**
