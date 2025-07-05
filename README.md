@@ -1,7 +1,23 @@
-# 👻 GhostPath — Uncover The Web's Hidden Trails
+<h1 align="center">👻 GhostPath — Uncover The Web's Hidden Trails</h1>
 
-A modular, powerful and fully open-source web reconnaissance toolkit built for **ethical hackers**, **OSINT analysts** and **security researchers**.
+<p align="center">
+  <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/type-Passive%20%2F%20Active%20Recon-yellow" alt="Recon Type">
+  <img src="https://img.shields.io/badge/modules-TimeTrail%20|%20CertTrack%20|%20PathProbe-orange" alt="Modules">
+  <img src="https://img.shields.io/badge/focus-OSINT%20Recon-red" alt="Focus">
+  <img src="https://img.shields.io/badge/debug-Verbose%20Logs%20Available-lightgrey" alt="Debug">
+  <img src="https://img.shields.io/badge/platform-Linux%20|%20WSL%20|%20MacOS-lightgreen" alt="Platform">
+  <img src="https://img.shields.io/badge/status-Under%20Active%20Development-brightgreen" alt="Status">
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/GhostPath-Recon%20%7C%20OSINT%20%7C%20Modular-blueviolet?style=for-the-badge&logo=ghost" alt="GhostPath Identity Badge">
+</p>
+
+<p align="center">
+  <em>A modular, powerful, and fully open-source web reconnaissance toolkit built for <strong>ethical hackers</strong>, <strong>OSINT analysts</strong>, and <strong>security researchers</strong>.</em>
+</p>
 With **GhostPath**, you can **dig through historical URLs**, **hunt down forgotten directories** and **enumerate subdomains from public certificate logs**, all from a single, intuitive CLI interface.
 
 ---
