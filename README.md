@@ -25,13 +25,13 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 
 ## 🚀 Why GhostPath?
 
-✅ Built from scratch — 100% unique, no forks, no clones
-✅ Modular architecture (passive and active modules)
-✅ Multi-source passive recon (Wayback, URLScan, Common Crawl)
-✅ Active directory brute-forcing with multithreading
-✅ Robust retry handling and error resilience
-✅ Debug mode for verbose internal logs
-✅ Designed for both learning and professional use
+✅ 100% original codebase — no forks, no clones, no dependencies.
+✅ Modular structure with clean separation of passive and active modes.
+✅ Fetches intel from multiple OSINT sources like Wayback, URLScan, and Common Crawl.
+✅ Fast, threaded path brute-forcing for active reconnaissance.
+✅ Automatic retry handling and robust error resilience built-in.
+✅ Debug mode for real-time verbose logging and troubleshooting.
+✅ Designed for both cybersecurity learners and professional red teamers.
 
 ---
 
