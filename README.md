@@ -25,12 +25,12 @@ With **GhostPath**, you can **dig through historical URLs**, **hunt down forgott
 
 ## 🚀 Why GhostPath?
 
-✅ Modular structure with clean separation of passive and active modes.
-✅ Fetches intel from multiple OSINT sources like Wayback, URLScan, and Common Crawl.
-✅ Fast, threaded path brute-forcing for active reconnaissance.
-✅ Automatic retry handling and robust error resilience built-in.
-✅ Debug mode for real-time verbose logging and troubleshooting.
-✅ Designed for both cybersecurity learners and professional red teamers.
+ ✅ Modular structure with clean separation of passive and active modes.
+ ✅ Fetches intel from multiple OSINT sources like Wayback, URLScan, and Common Crawl.
+ ✅ Fast, threaded path brute-forcing for active reconnaissance.
+ ✅ Automatic retry handling and robust error resilience built-in.
+ ✅ Debug mode for real-time verbose logging and troubleshooting.
+ ✅ Designed for both cybersecurity learners and professional red teamers.
 
 
 ---
