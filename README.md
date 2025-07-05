@@ -1,144 +1,291 @@
-# 🕵️‍♂️ GhostPath — Trace the Web's Forgotten Trails
+# 👻 GhostPath — Uncover The Web's Hidden Trails
 
-GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
+**GhostPath** is a modular, CLI-based web reconnaissance toolkit for discovering hidden paths, historical URLs and subdomains. Designed for ethical hackers, OSINT analysts and bug bounty hunters, it offers both passive data scraping and active directory brute-forcing, all in one tool.
 
-Designed for **ethical hackers, bug bounty hunters and red teams**, GhostPath reveals historical URLs, forgotten subdomains and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
-
-Lightweight, fast and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
+With **GhostPath**, you can **dig through historical URLs**, **hunt down forgotten directories** and **enumerate subdomains from public certificate logs**, all from a single, intuitive CLI interface.
 
 ---
 
-### 🧩 Capabilities at a Glance
+## 🚀 Why GhostPath?
 
-<p align="center">
-  <a href="#">
-    <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="Subdomain Enumeration" src="https://img.shields.io/badge/Subdomain_Enumeration-✔️-blue?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="Historical URL Discovery" src="https://img.shields.io/badge/Historical_URL_Discovery-✔️-orange?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="No API Keys Required" src="https://img.shields.io/badge/No_API_Keys_Required-✔️-lightgrey?style=for-the-badge" />
-  </a>
-  <a href="https://www.python.org/downloads/">
-    <img alt="Python 3.7+" src="https://img.shields.io/badge/Python-3.7+-blue.svg?style=for-the-badge&logo=python" />
-  </a>
-  <a href="#">
-    <img alt="Supported OS" src="https://img.shields.io/badge/OS-Linux%20|%20macOS%20|%20Windows-lightgrey.svg?style=for-the-badge" />
-  </a>
-  <a href="https://opensource.org/licenses/BSD-3-Clause">
-    <img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" />
-  </a>
-</p>
+✅ Modular Architecture
+✅ Multi-source Historical URL Collection (Wayback, URLScan, CommonCrawl)
+✅ Certificate-based Subdomain Enumeration (crt.sh)
+✅ Active Path Probing with Wordlists
+✅ Customizable Output Formats (TXT, JSON, CSV)
+✅ Built-in Retry Handling for Network Stability    
+✅ Debug Mode for Verbose Output
+✅ Future-Ready for Additional Recon Modules
 
 ---
 
-## 🚀 Features
-
-- 🔍 **Passive Reconnaissance:** Gather intelligence without direct interaction with the target.
-- 🌐 **Subdomain Enumeration:** Discover subdomains via multiple sources and APIs.
-- 📜 **Historical URL Discovery:** Fetch archived URLs from Wayback Machine and others.
-- 🔑 **No API Keys Required:** Ready-to-use without any setup hassle.
-- 🧹 **Deduplication:** Removes duplicate URLs and subdomains for clean output.
-- 📦 **Modular Architecture:** Easily extendable with fetchers and utilities.
-- 🐍 **Python 3.7+ Compatible:** Works on all major OS (Linux, macOS, Windows).
-- 🛠️ **CLI Tool:** Simple command-line interface for quick scans.
-
----
-> “Reconnaissance is the foundation of a secure attack and an effective defense.”
-> — *Atharv Yadav*
----
-
-## 📦 Installation
+## 🛠️ Installation
 
 ```bash
-# Clone the repository
+# Clone GhostPath
 git clone https://github.com/atharvbyadav/GhostPath.git
 cd GhostPath
 
-# (Optional) Create and activate a virtual environment
+# (Optional but recommended) Create a virtual environment
 python3 -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+source venv/bin/activate
 
-# Install dependencies
+# Install required Python packages
 pip install -r requirements.txt
-````
-
----
-
-## ⚙️ Usage
-
-```bash
-python main.py --domain example.com
-```
-
-Replace `example.com` with your target domain.
-
-### Options
-
-* `--domain` : Specify the target domain for reconnaissance.
-* `--output` : (Optional) Specify a file to save the results.
-* `--verbose`: Enable detailed output.
-
-*For full options, run:*
-
-```bash
-python main.py --help
 ```
 
 ---
 
-## 📂 Project Structure
+## 🧭 Usage Overview
+
+```bash
+python3 ghostpath/main.py --help
+```
+
+This will list all available modules.
+
+For help on a specific module:
+
+```bash
+python3 ghostpath/main.py <module> --help
+```
+
+Where `<module>` can be:
+
+* `timetrail`
+* `certtrack`
+* `pathprobe`
+* *(More coming soon...)*
+
+---
+
+## 📂 Available Modules
+
+---
+
+### 🌐 TimeTrail – Historical URL Discovery
+
+**Dig through web archives and discover past URLs for a target domain.**
+
+**Supported Sources:**
+
+* Wayback Machine
+* URLScan.io
+* Common Crawl Index
+
+**Usage:**
+
+```bash
+python3 ghostpath/main.py timetrail --target <domain> --source <wayback|urlscan|commoncrawl> [options]
+```
+
+**Flags:**
+
+| Flag       | Description                                      |
+| ---------- | ------------------------------------------------ |
+| `--target` | Target domain (e.g., `example.com`)              |
+| `--source` | Data source: `wayback`, `urlscan`, `commoncrawl` |
+| `--output` | Save results to a file                           |
+| `--format` | Output format: `txt`, `json` or `csv`           |
+| `--debug`  | Enable verbose debug output                      |
+
+**Example:**
+
+```bash
+python3 ghostpath/main.py timetrail --target example.com --source wayback --output urls.txt --debug
+```
+
+---
+
+### 🔎 CertTrack – Passive Subdomain Enumeration
+
+**Extract subdomains from public Certificate Transparency logs using crt.sh**
+
+**Usage:**
+
+```bash
+python3 ghostpath/main.py certtrack --target <domain> [options]
+```
+
+**Flags:**
+
+| Flag       | Description                            |
+| ---------- | -------------------------------------- |
+| `--target` | Target domain (e.g., `example.com`)    |
+| `--output` | Save results to a file                 |
+| `--format` | Output format: `txt`, `json` or `csv` |
+| `--debug`  | Enable debug output                    |
+
+**Example:**
+
+```bash
+python3 ghostpath/main.py certtrack --target example.com --format json --debug
+```
+
+---
+
+### 🛡️ PathProbe – Active Directory & File Brute-Forcing
+
+**Actively discover hidden directories and files by brute-forcing URL paths.**
+
+**Usage:**
+
+```bash
+python3 ghostpath/main.py pathprobe --target <url> --wordlist <file> [options]
+```
+
+**Flags:**
+
+| Flag         | Description                                         |
+| ------------ | --------------------------------------------------- |
+| `--target`   | Full base URL (e.g., `https://example.com`)         |
+| `--wordlist` | Path to a wordlist file (one path per line)         |
+| `--status`   | HTTP status codes to match (default: `200 301 302`) |
+| `--threads`  | Number of concurrent threads (default: 10)          |
+| `--output`   | Save results to a file                              |
+| `--format`   | Output format: `txt`, `json` or `csv`              |
+| `--debug`    | Enable verbose output                               |
+
+**Example:**
+
+```bash
+python3 ghostpath/main.py pathprobe --target https://example.com --wordlist wordlists/common.txt --status 200 403 --threads 20 --debug
+```
+
+---
+
+### 🛠️ Upcoming Module: DomainScope (Coming Soon 🚧)
+
+**Stay tuned for:**
+
+* WHOIS Lookups
+* Geolocation Data
+* Reverse DNS
+* ASN Details
+* DNS Record Enumeration
+
+*DomainScope will focus on passive metadata footprinting from public internet sources.*
+
+---
+
+## 📤 Output Formats
+
+| Format  | Description                                |
+| ------- | ------------------------------------------ |
+| `.txt`  | Simple, newline-separated                  |
+| `.json` | Structured JSON array                      |
+| `.csv`  | Easy-to-import CSV format for spreadsheets |
+
+**Example:**
+
+```bash
+--output results.json --format json
+```
+
+---
+
+## 🐞 Debug Mode – See GhostPath Think in Real-Time
+
+GhostPath includes a powerful `--debug` flag for **any module**, giving you:
+
+✅ Full API endpoints and request parameters
+✅ HTTP status codes and responses
+✅ Retry attempt details
+✅ Internal decision logs
+
+**Example:**
+
+```bash
+python3 ghostpath/main.py timetrail --target example.com --source urlscan --debug
+```
+
+You’ll get live console feedback like:
+
+```
+[DEBUG] Fetching historical URLs for domain: example.com
+[DEBUG] URLScan API URL: https://urlscan.io/api/v1/search/?q=domain:example.com
+[DEBUG] HTTP 200 Response from URLScan
+```
+
+---
+
+## 🔁 Robust Error Handling & Retry Logic
+
+GhostPath handles flaky networks like a champ.
+
+| Module    | Built-in Retry?              |
+| --------- | ---------------------------- |
+| TimeTrail | ✅ Yes (for all data sources) |
+| CertTrack | ✅ Yes (crt.sh API retries)   |
+| PathProbe | ✅ Yes (per-target retries)   |
+
+✅ Automatic backoff
+✅ Debug logging of failures
+✅ Graceful exit after retry exhaustion
+
+---
+
+## 🏗️ Project Structure
 
 ```
 GhostPath/
-├── fetchers/          # Modules to fetch data from different passive sources
-│   ├── subdomains.py  # Subdomain enumeration logic
-│   └── wayback.py     # Historical URL discovery from Wayback Machine
-├── utils/             # Utility modules for deduplication, parsing, etc.
-│   └── dedup.py       # Deduplication functions
-├── main.py            # Main CLI entry point
-├── requirements.txt   # Python dependencies
-└── README.md          # Project documentation
+├── ghostpath/
+│   ├── main.py
+│   ├── modules/
+│   │   ├── passive/
+│   │   │   ├── timetrail.py
+│   │   │   └── certtrack.py
+│   │   ├── active/
+│   │   │   └── pathprobe.py
+│   │   └── shared/
+│   │       ├── logger.py
+│   │       └── output.py
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## 🤝 Contributing
+## 🛣️ Roadmap
 
-Contributions are welcome! Please open issues or pull requests for bugs, improvements or new fetchers.
+✅ Output filtering (keyword, extension based)
+✅ API key-based OSINT plugins
+✅ Batch multi-target scanning
+✅ Exportable JSON schemas for automation
+✅ Proxy support
 
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to your branch (`git push origin feature-name`)
-5. Open a Pull Request
+*Want to contribute? Pull requests are welcome!*
+
+---
+
+## ⚖️ Legal & Ethical Disclaimer
+
+GhostPath is a **research-focused and educational web reconnaissance tool**, developed for **security professionals**, **ethical hackers** and **OSINT researchers**.
+
+By using GhostPath, you agree that:
+
+* ✅ You have **explicit and legal authorization** to scan the target systems or domains.
+* ✅ You will **never use GhostPath for unauthorized, malicious or illegal activities**.
+* ✅ You take **full responsibility** for your actions and their consequences.
+
+> **Reminder:**
+> **Unauthorized scanning is illegal and unethical.
+> Stay professional. Stay responsible. Stay ethical.**
+
+---
+
+## 👨‍💻 Author
+
+Built with ❤️ and Python by **Atharv Yadav**
+
+🔗 [GitHub – atharvbyadav](https://github.com/atharvbyadav)
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **BSD 3-Clause License** — see the [LICENSE](LICENSE) file for details.
+GhostPath is distributed under the **BSD 3-Clause License**.
 
----
+You are free to **use**, **modify** and **redistribute**, provided you comply with the license terms and retain attribution.
 
-## 📬 Contact
-
-Have ideas, suggestions, or just want to connect?
-
-- **👨‍💻 Author**: **Atharv Yadav**
-- **📧 Email**: [uuwr5t1s@duck.com](mailto:uuwr5t1s@duck.com)  
-  _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_
-- **🌐 Website**: [atharvbyadav.github.io](https://atharvbyadav.github.io)
-- **🐙 GitHub**: [@atharvbyadav](https://github.com/atharvbyadav)
-- **🧠 Connect**: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
-
-> *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
-
----
-
-
-
+For full details, check the [`LICENSE`](./LICENSE) file.
