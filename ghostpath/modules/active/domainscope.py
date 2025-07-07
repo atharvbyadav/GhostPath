@@ -1,35 +1,20 @@
-# ghostpath/modules/domainscope.py
+# ghostpath/modules/active/domainscope.py
 
 import requests
 import json
 from modules.shared import logger, output
 import argparse
+import re
 
 def arg_parser():
     parser = argparse.ArgumentParser(
         prog="domainscope",
         description="Enumerate subdomains from passive DNS sources like crt.sh and URLScan"
     )
-    parser.add_argument(
-        "--target",
-        required=True,
-        help="Target domain to enumerate subdomains for (e.g., example.com)"
-    )
-    parser.add_argument(
-        "--output",
-        help="Path to save output file"
-    )
-    parser.add_argument(
-        "--format",
-        choices=["json", "txt", "csv"],
-        default="txt",
-        help="Output format (default: txt)"
-    )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enable verbose debug output"
-    )
+    parser.add_argument("--target", required=True, help="Target domain to enumerate subdomains for (e.g., example.com)")
+    parser.add_argument("--output", help="Path to save output file")
+    parser.add_argument("--format", choices=["json", "txt", "csv"], default="txt", help="Output format (default: txt)")
+    parser.add_argument("--debug", action="store_true", help="Enable verbose debug output")
     return parser
 
 def run(args):
@@ -43,17 +28,31 @@ def run(args):
         crtsh_subdomains = fetch_crtsh(domain)
         urlscan_subdomains = fetch_urlscan(domain)
 
-        all_subdomains = set(crtsh_subdomains + urlscan_subdomains)
-        logger.debug(f"Total unique subdomains discovered: {len(all_subdomains)}")
+        all_raw = set(crtsh_subdomains + urlscan_subdomains)
 
-        if args.output:
-            output.save_results(all_subdomains, args.output, args.format)
-            print(f"[DomainScope] Results saved to: {args.output}")
-        else:
-            for sub in sorted(all_subdomains):
-                print(sub)
+        # Separate into valid subdomains and noisy extras
+        valid, noisy = filter_valid_subdomains(all_raw, domain)
+        logger.debug(f"Filtered: {len(valid)} valid, {len(noisy)} noisy from {len(all_raw)} total")
+
+        if not valid and not noisy:
+            print("[!] No results found.")
+            return
+
+        if valid:
+            if args.output:
+                output.save_results(valid, args.output, args.format)
+                print(f"[DomainScope] Results saved to: {args.output}")
+            else:
+                for sub in sorted(valid):
+                    print(sub)
+
+        if noisy:
+            print("\n⚠️  Some extra entries were found but skipped from main list:")
+            for n in sorted(noisy):
+                print(f"  - {n}")
 
     except Exception as e:
+        logger.debug(f"DomainScope error: {e}")
         print(f"[DomainScope] Error: {e}")
 
 def fetch_crtsh(domain):
@@ -103,3 +102,20 @@ def fetch_urlscan(domain):
     except Exception as e:
         logger.debug(f"URLScan fetch failed: {e}")
         return []
+
+def filter_valid_subdomains(all_entries, domain):
+    valid = set()
+    noisy = set()
+
+    domain_regex = re.compile(rf"^(?:[\w-]+\.)*{re.escape(domain)}$", re.IGNORECASE)
+
+    for entry in all_entries:
+        e = entry.strip()
+        if " " in e or "@" in e:
+            noisy.add(e)
+        elif domain_regex.match(e):
+            valid.add(e)
+        else:
+            noisy.add(e)
+
+    return list(valid), list(noisy)

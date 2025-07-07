@@ -1,4 +1,4 @@
-# ghostpath/modules/timetrail.py
+# ghostpath/modules/passive/timetrail.py
 
 import requests
 import time
@@ -12,32 +12,11 @@ def arg_parser():
         prog="timetrail",
         description="Fetch historical URLs from archives like Wayback Machine, URLScan, and Common Crawl"
     )
-    parser.add_argument(
-        "--target",
-        required=True,
-        help="Target domain for historical URL discovery (e.g., example.com)"
-    )
-    parser.add_argument(
-        "--source",
-        choices=["wayback", "urlscan", "commoncrawl"],
-        required=True,
-        help="Source for historical URLs: wayback | urlscan | commoncrawl"
-    )
-    parser.add_argument(
-        "--output",
-        help="Path to save output file"
-    )
-    parser.add_argument(
-        "--format",
-        choices=["json", "txt", "csv"],
-        default="txt",
-        help="Output format (default: txt)"
-    )
-    parser.add_argument(
-        "--debug",
-        action="store_true",
-        help="Enable verbose debug output"
-    )
+    parser.add_argument("--target", required=True, help="Target domain for historical URL discovery (e.g., example.com)")
+    parser.add_argument("--source", choices=["wayback", "urlscan", "commoncrawl"], default="commoncrawl", help="Archive source: wayback | urlscan | commoncrawl (default: commoncrawl)")
+    parser.add_argument("--output", help="Path to save output file")
+    parser.add_argument("--format", choices=["json", "txt", "csv"], default="txt", help="Output format (default: txt)")
+    parser.add_argument("--debug", action="store_true", help="Enable verbose debug output")
     return parser
 
 def run(args):
@@ -59,14 +38,20 @@ def run(args):
 
         logger.debug(f"Total unique URLs fetched: {len(urls)}")
 
-        if args.output:
-            output.save_results(urls, args.output, args.format)
-            print(f"[TimeTrail] Results saved to: {args.output}")
-        else:
-            for u in urls:
-                print(u)
+        if not urls:
+            print("[!] No results found.")
+            return
+
+        # Save results to provided output OR auto filename
+        filename = args.output
+        if not filename:
+            filename = f"{args.target}.{args.format}"
+
+        output.save_results(urls, filename, args.format)
+        print(f"[TimeTrail] Results saved to: {filename}")
 
     except Exception as e:
+        logger.debug(f"TimeTrail error: {e}")
         print(f"[TimeTrail] Error: {e}")
 
 def fetch_wayback_urls(domain, retries=3):
@@ -78,9 +63,7 @@ def fetch_wayback_urls(domain, retries=3):
         "collapse": "urlkey",
         "limit": 5000
     }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (GhostPath/2025)"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (GhostPath/2025)"}
 
     logger.debug(f"Wayback API URL: {url} with params {params}")
 
@@ -111,13 +94,8 @@ def fetch_wayback_urls(domain, retries=3):
 
 def fetch_urlscan_urls(domain, retries=3):
     api_url = "https://urlscan.io/api/v1/search/"
-    params = {
-        "q": f"domain:{domain}",
-        "size": 1000
-    }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (GhostPath/2025)"
-    }
+    params = {"q": f"domain:{domain}", "size": 1000}
+    headers = {"User-Agent": "Mozilla/5.0 (GhostPath/2025)"}
 
     logger.debug(f"URLScan API URL: {api_url} with params {params}")
 
@@ -154,9 +132,7 @@ def fetch_urlscan_urls(domain, retries=3):
 def fetch_commoncrawl_urls(domain, retries=3):
     index_url = "https://index.commoncrawl.org/CC-MAIN-2024-10-index"
     query_url = f"{index_url}?url=*.{domain}/*&output=json"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (GhostPath/2025)"
-    }
+    headers = {"User-Agent": "Mozilla/5.0 (GhostPath/2025)"}
 
     logger.debug(f"Common Crawl API URL: {query_url}")
 

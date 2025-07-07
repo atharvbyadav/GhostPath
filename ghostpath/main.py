@@ -10,7 +10,6 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 COMMANDS = ["timetrail", "domainscope", "pathprobe", "certtrack", "clear", "help", "exit"]
 
-# Tab-completion setup
 readline.parse_and_bind("tab: complete")
 readline.set_completer(
     lambda text, state: [cmd for cmd in COMMANDS if cmd.startswith(text)][state]
@@ -44,29 +43,34 @@ def show_help():
 """)
 
 def run_command(command, args):
-    if command == "timetrail":
-        from modules.passive import timetrail
-        parser = timetrail.arg_parser()
-        parsed_args = parser.parse_args(args)
-        timetrail.run(parsed_args)
+    try:
+        if command == "timetrail":
+            from modules.passive import timetrail
+            parser = timetrail.arg_parser()
+            parsed_args = parser.parse_args(args)
+            timetrail.run(parsed_args)
 
-    elif command == "domainscope":
-        from modules.active import domainscope
-        parser = domainscope.arg_parser()
-        parsed_args = parser.parse_args(args)
-        domainscope.run(parsed_args)
+        elif command == "domainscope":
+            from modules.active import domainscope
+            parser = domainscope.arg_parser()
+            parsed_args = parser.parse_args(args)
+            domainscope.run(parsed_args)
 
-    elif command == "pathprobe":
-        from modules.active import pathprobe
-        parser = pathprobe.arg_parser()
-        parsed_args = parser.parse_args(args)
-        pathprobe.run(parsed_args)
+        elif command == "pathprobe":
+            from modules.active import pathprobe
+            parser = pathprobe.arg_parser()
+            parsed_args = parser.parse_args(args)
+            pathprobe.run(parsed_args)
 
-    elif command == "certtrack":
-        from modules.passive import certtrack
-        parser = certtrack.arg_parser()
-        parsed_args = parser.parse_args(args)
-        certtrack.run(parsed_args)
+        elif command == "certtrack":
+            from modules.passive import certtrack
+            parser = certtrack.arg_parser()
+            parsed_args = parser.parse_args(args)
+            certtrack.run(parsed_args)
+    except SystemExit:
+        print("[!] Invalid arguments. Type 'help' for usage.")
+    except Exception as e:
+        print(f"[!] Error: {e}")
 
 def main():
     show_banner()
@@ -97,7 +101,7 @@ def main():
         except KeyboardInterrupt:
             print("\n[!] Use 'exit' to leave the shell.")
         except Exception as e:
-            print(f"[!] Error: {e}")
+            print(f"[!] Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()
