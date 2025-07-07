@@ -1,10 +1,17 @@
+# ghostpath/modules/timetrail.py
+
 import requests
 import time
 import json
 from urllib.parse import urlparse
 from modules.shared import output, logger
+import argparse
 
-def add_arguments(parser):
+def arg_parser():
+    parser = argparse.ArgumentParser(
+        prog="timetrail",
+        description="Fetch historical URLs from archives like Wayback Machine, URLScan, and Common Crawl"
+    )
     parser.add_argument(
         "--target",
         required=True,
@@ -31,6 +38,7 @@ def add_arguments(parser):
         action="store_true",
         help="Enable verbose debug output"
     )
+    return parser
 
 def run(args):
     if args.debug:
@@ -55,13 +63,14 @@ def run(args):
             output.save_results(urls, args.output, args.format)
             print(f"[TimeTrail] Results saved to: {args.output}")
         else:
-            print("\n".join(urls))
+            for u in urls:
+                print(u)
 
     except Exception as e:
         print(f"[TimeTrail] Error: {e}")
 
 def fetch_wayback_urls(domain, retries=3):
-    url = f"https://web.archive.org/cdx/search/cdx"
+    url = "https://web.archive.org/cdx/search/cdx"
     params = {
         "url": f"*.{domain}/*",
         "output": "text",
@@ -82,7 +91,6 @@ def fetch_wayback_urls(domain, retries=3):
 
             with requests.get(url, headers=headers, params=params, timeout=60, stream=True) as response:
                 logger.debug(f"HTTP {response.status_code} Response from Wayback")
-
                 response.raise_for_status()
 
                 urls = set(
@@ -102,7 +110,7 @@ def fetch_wayback_urls(domain, retries=3):
     raise Exception(f"Failed to fetch Wayback URLs for {domain} after {retries} attempts")
 
 def fetch_urlscan_urls(domain, retries=3):
-    api_url = f"https://urlscan.io/api/v1/search/"
+    api_url = "https://urlscan.io/api/v1/search/"
     params = {
         "q": f"domain:{domain}",
         "size": 1000
@@ -146,7 +154,6 @@ def fetch_urlscan_urls(domain, retries=3):
 def fetch_commoncrawl_urls(domain, retries=3):
     index_url = "https://index.commoncrawl.org/CC-MAIN-2024-10-index"
     query_url = f"{index_url}?url=*.{domain}/*&output=json"
-
     headers = {
         "User-Agent": "Mozilla/5.0 (GhostPath/2025)"
     }

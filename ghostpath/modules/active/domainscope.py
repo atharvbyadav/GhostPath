@@ -1,23 +1,19 @@
-import socket
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from modules.shared import output, logger
+# ghostpath/modules/domainscope.py
 
-def add_arguments(parser):
+import requests
+import json
+from modules.shared import logger, output
+import argparse
+
+def arg_parser():
+    parser = argparse.ArgumentParser(
+        prog="domainscope",
+        description="Enumerate subdomains from passive DNS sources like crt.sh and URLScan"
+    )
     parser.add_argument(
         "--target",
         required=True,
-        help="Target domain for subdomain discovery (e.g., example.com)"
-    )
-    parser.add_argument(
-        "--input-file",
-        required=True,
-        help="Path to wordlist file containing subdomain prefixes"
-    )
-    parser.add_argument(
-        "--workers",
-        type=int,
-        default=10,
-        help="Number of parallel workers (default: 10)"
+        help="Target domain to enumerate subdomains for (e.g., example.com)"
     )
     parser.add_argument(
         "--output",
@@ -34,63 +30,76 @@ def add_arguments(parser):
         action="store_true",
         help="Enable verbose debug output"
     )
+    return parser
 
 def run(args):
     if args.debug:
         logger.enable_debug()
 
-    target_domain = args.target
-    wordlist_path = args.input_file
-    workers = args.workers
-
-    logger.debug(f"Starting DomainScope on target: {target_domain}")
-    logger.debug(f"Using wordlist: {wordlist_path}")
-    logger.debug(f"Using {workers} threads")
+    domain = args.target
+    logger.debug(f"Enumerating subdomains for domain: {domain}")
 
     try:
-        with open(wordlist_path, "r") as f:
-            prefixes = [line.strip() for line in f if line.strip()]
+        crtsh_subdomains = fetch_crtsh(domain)
+        urlscan_subdomains = fetch_urlscan(domain)
 
-        logger.debug(f"Total prefixes loaded: {len(prefixes)}")
-
-        results = []
-
-        with ThreadPoolExecutor(max_workers=workers) as executor:
-            future_to_subdomain = {
-                executor.submit(resolve_subdomain, prefix, target_domain): prefix for prefix in prefixes
-            }
-
-            for future in as_completed(future_to_subdomain):
-                prefix = future_to_subdomain[future]
-                try:
-                    resolved_ip = future.result()
-                    if resolved_ip:
-                        full_subdomain = f"{prefix}.{target_domain}"
-                        results.append({
-                            "subdomain": full_subdomain,
-                            "ip": resolved_ip
-                        })
-                        print(f"[FOUND] {full_subdomain} -> {resolved_ip}")
-                except Exception as e:
-                    logger.debug(f"Error resolving '{prefix}': {e}")
-
-        logger.debug(f"Total live subdomains found: {len(results)}")
+        all_subdomains = set(crtsh_subdomains + urlscan_subdomains)
+        logger.debug(f"Total unique subdomains discovered: {len(all_subdomains)}")
 
         if args.output:
-            output.save_results(results, args.output, args.format)
+            output.save_results(all_subdomains, args.output, args.format)
             print(f"[DomainScope] Results saved to: {args.output}")
+        else:
+            for sub in sorted(all_subdomains):
+                print(sub)
 
-    except FileNotFoundError:
-        print(f"[DomainScope] Error: Wordlist file not found: {wordlist_path}")
     except Exception as e:
-        print(f"[DomainScope] Unexpected error: {e}")
+        print(f"[DomainScope] Error: {e}")
 
-def resolve_subdomain(prefix, domain):
-    subdomain = f"{prefix}.{domain}"
-    logger.debug(f"Resolving subdomain: {subdomain}")
+def fetch_crtsh(domain):
+    url = f"https://crt.sh/?q=%25.{domain}&output=json"
+    headers = {"User-Agent": "GhostPath-DomainScope"}
+
+    logger.debug(f"Querying crt.sh for: {domain}")
     try:
-        ip = socket.gethostbyname(subdomain)
-        return ip
-    except socket.gaierror:
-        logger.debug(f"Subdomain not found: {subdomain}")
-        return None
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+
+        data = response.json()
+        subdomains = set()
+        for cert in data:
+            name_value = cert.get("name_value", "")
+            for sub in name_value.split("\n"):
+                if domain in sub:
+                    subdomains.add(sub.strip())
+
+        logger.debug(f"Found {len(subdomains)} subdomains from crt.sh")
+        return list(subdomains)
+
+    except Exception as e:
+        logger.debug(f"crt.sh fetch failed: {e}")
+        return []
+
+def fetch_urlscan(domain):
+    url = "https://urlscan.io/api/v1/search/"
+    params = {"q": f"domain:{domain}", "size": 1000}
+    headers = {"User-Agent": "GhostPath-DomainScope"}
+
+    logger.debug(f"Querying URLScan for: {domain}")
+    try:
+        response = requests.get(url, headers=headers, params=params, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+
+        subdomains = set()
+        for entry in data.get("results", []):
+            page_url = entry.get("page", {}).get("domain", "")
+            if page_url and domain in page_url:
+                subdomains.add(page_url.strip())
+
+        logger.debug(f"Found {len(subdomains)} subdomains from URLScan")
+        return list(subdomains)
+
+    except Exception as e:
+        logger.debug(f"URLScan fetch failed: {e}")
+        return []

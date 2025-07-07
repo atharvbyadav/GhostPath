@@ -1,72 +1,103 @@
-import argparse
+#!/usr/bin/env python3
+
+import readline
+import shlex
+import os
 import sys
 
-from modules.passive import timetrail, certtrack
-from modules.active import pathprobe, domainscope
+# Add local ghostpath path to sys
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+COMMANDS = ["timetrail", "domainscope", "pathprobe", "certtrack", "clear", "help", "exit"]
+
+# Tab-completion setup
+readline.parse_and_bind("tab: complete")
+readline.set_completer(
+    lambda text, state: [cmd for cmd in COMMANDS if cmd.startswith(text)][state]
+    if state < len([cmd for cmd in COMMANDS if cmd.startswith(text)]) else None
+)
+
+def show_banner():
+    banner = r"""
+   ▒█████   ██░ ██  ▒█████   ██████ ▄▄▄█████▓     ▒███████▒ ▄▄▄      ████████  ██░ ██ 
+  ▒██▒      ██░ ██▒▒██▒  ██▒▒██    ▒ ▓  ██▒ ▓▒    ▒ ██▒ ██░▒████▄   ▒██ ██ ▒▒ ▓██░ ██▒    
+  ▒██░████▒▒██▀▀██░▒██░  ██▒░ ▓██▄   ▒ ▓██░ ▒░    ░ ██████ ▒██  ▀█▄  ░▓ ██ ▒░ ▒██▀▀██░
+  ▒██ ▒▓██░░▓█ ░██ ▒██   ██░  ▒   ██▒░ ▓██▓ ░     ▒ ██▒   ░░██▄▄▄▄██  ▒ ██ ░░▒░▓█ ░██ 
+  ░ ████▓▒░░▓█▒░██▓░ ████▓▒░▒██████▒▒  ▒██▒ ░     ▒ ██   ▒▒ ▓█   ▓██▒▒░ ██ ▒ ▒▒░▓█▒░██▓
+  ░ ▒░▒░▒░  ▒ ░░▒░▒░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░  ▒ ░░         ▒▓▒ ▒ ░ ▒▒   ▓▒█░▒░▒▓▒ ▒ ░ ▒ ░░▒░▒
+    ░ ▒ ▒░  ▒ ░▒░ ░  ░ ▒ ▒░ ░ ░▒  ░ ░    ░        ░ ░▒  ░ ░  ▒   ▒▒ ░░ ░▒▒ ░ ░ ▒ ░▒░ ░ 
+  ░ ░ ░ ▒   ░  ░░ ░░ ░ ░ ▒  ░  ░  ░    ░          ░  ░  ░    ░   ▒   ░  ░▒ ░   ░  ░░ ░  
+      ░ ░   ░  ░  ░    ░ ░        ░                       ░        ░  ░    ░ ░   ░  ░  ░
+"""
+    print(banner)
+
+def show_help():
+    print("""
+🧩 Available GhostPath Commands:
+  timetrail      → Fetch historical URLs from archives (Wayback, URLScan, Common Crawl)
+  domainscope    → Discover subdomains & DNS profiling
+  pathprobe      → Actively probe directories and endpoints
+  certtrack      → Get subdomains from public SSL/TLS certs
+  clear          → Clear the screen
+  help           → Show this help menu
+  exit           → Exit GhostPath CLI
+""")
+
+def run_command(command, args):
+    if command == "timetrail":
+        from modules.passive import timetrail
+        parser = timetrail.arg_parser()
+        parsed_args = parser.parse_args(args)
+        timetrail.run(parsed_args)
+
+    elif command == "domainscope":
+        from modules.active import domainscope
+        parser = domainscope.arg_parser()
+        parsed_args = parser.parse_args(args)
+        domainscope.run(parsed_args)
+
+    elif command == "pathprobe":
+        from modules.active import pathprobe
+        parser = pathprobe.arg_parser()
+        parsed_args = parser.parse_args(args)
+        pathprobe.run(parsed_args)
+
+    elif command == "certtrack":
+        from modules.passive import certtrack
+        parser = certtrack.arg_parser()
+        parsed_args = parser.parse_args(args)
+        certtrack.run(parsed_args)
 
 def main():
-    parser = argparse.ArgumentParser(
-        prog="ghostpath",
-        description="GhostPath - OSINT & Active Recon Toolkit (2025 Edition)"
-    )
+    show_banner()
+    print("👻 GhostPath Interactive Recon Shell | Type 'help' for options\n")
 
-    subparsers = parser.add_subparsers(
-        dest="module",
-        title="Modules",
-        description="Choose a module to run",
-        help="Use 'ghostpath <module> --help' for module-specific options."
-    )
+    while True:
+        try:
+            user_input = input("ghostpath> ").strip()
+            if not user_input:
+                continue
 
-    # ----- Passive Modules -----
-    # TimeTrail Module (Historical URLs)
-    timetrail_parser = subparsers.add_parser(
-        "timetrail",
-        help="Historical URL Discovery (Passive)"
-    )
-    timetrail.add_arguments(timetrail_parser)
+            args = shlex.split(user_input)
+            command = args[0]
+            cmd_args = args[1:]
 
-    # CertTrack Module (Subdomains from cert transparency)
-    certtrack_parser = subparsers.add_parser(
-        "certtrack",
-        help="Subdomain Discovery from Certificate Transparency Logs (Passive)"
-    )
-    certtrack.add_arguments(certtrack_parser)
+            if command == "exit":
+                print("[*] Exiting GhostPath.")
+                break
+            elif command == "clear":
+                os.system("cls" if os.name == "nt" else "clear")
+            elif command == "help":
+                show_help()
+            elif command in COMMANDS:
+                run_command(command, cmd_args)
+            else:
+                print(f"[!] Unknown command: '{command}'. Type 'help'.")
 
-    # ----- Active Modules -----
-    # PathProbe Module (Active endpoint probing)
-    pathprobe_parser = subparsers.add_parser(
-        "pathprobe",
-        help="Hidden Path Discovery (Active)"
-    )
-    pathprobe.add_arguments(pathprobe_parser)
-
-    # DomainScope Module (Subdomain brute force)
-    domainscope_parser = subparsers.add_parser(
-        "domainscope",
-        help="Subdomain Wordlist Discovery (Active)"
-    )
-    domainscope.add_arguments(domainscope_parser)
-
-    # Parse arguments
-    args = parser.parse_args()
-
-    # No module selected
-    if args.module is None:
-        parser.print_help()
-        sys.exit(1)
-
-    # Module Dispatcher
-    if args.module == "timetrail":
-        timetrail.run(args)
-    elif args.module == "certtrack":
-        certtrack.run(args)
-    elif args.module == "pathprobe":
-        pathprobe.run(args)
-    elif args.module == "domainscope":
-        domainscope.run(args)
-    else:
-        print(f"Unknown module: {args.module}")
-        sys.exit(1)
+        except KeyboardInterrupt:
+            print("\n[!] Use 'exit' to leave the shell.")
+        except Exception as e:
+            print(f"[!] Error: {e}")
 
 if __name__ == "__main__":
     main()

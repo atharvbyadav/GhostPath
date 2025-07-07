@@ -1,9 +1,13 @@
-DEBUG_ENABLED = False
+# ghostpath/modules/shared/logger.py
+
+import sys
+
+debug_enabled = False
 
 def enable_debug():
-    global DEBUG_ENABLED
-    DEBUG_ENABLED = True
+    global debug_enabled
+    debug_enabled = True
 
 def debug(message):
-    if DEBUG_ENABLED:
-        print(f"[DEBUG] {message}")
+    if debug_enabled:
+        print(f"[DEBUG] {message}", file=sys.stderr)

@@ -1,16 +1,23 @@
-import requests
-import time
-from modules.shared import output, logger
+# ghostpath/modules/certtrack.py
 
-def add_arguments(parser):
+import requests
+import json
+from modules.shared import logger, output
+import argparse
+
+def arg_parser():
+    parser = argparse.ArgumentParser(
+        prog="certtrack",
+        description="Discover subdomains via Certificate Transparency logs (crt.sh)"
+    )
     parser.add_argument(
         "--target",
         required=True,
-        help="Target domain for subdomain enumeration (e.g., example.com)"
+        help="Target domain (e.g., example.com)"
     )
     parser.add_argument(
         "--output",
-        help="Path to save output file"
+        help="Path to save results"
     )
     parser.add_argument(
         "--format",
@@ -23,62 +30,41 @@ def add_arguments(parser):
         action="store_true",
         help="Enable verbose debug output"
     )
+    return parser
 
 def run(args):
     if args.debug:
         logger.enable_debug()
 
     domain = args.target
-    logger.debug(f"Fetching subdomains for domain: {domain} from crt.sh")
+    logger.debug(f"Querying crt.sh for Certificate Transparency data on: {domain}")
 
     try:
-        subdomains = fetch_crtsh_subdomains(domain)
-        logger.debug(f"Total unique subdomains fetched: {len(subdomains)}")
+        url = f"https://crt.sh/?q=%25.{domain}&output=json"
+        headers = {
+            "User-Agent": "GhostPath-CertTrack/2025"
+        }
+
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+
+        subdomains = set()
+        for entry in data:
+            name_val = entry.get("name_value", "")
+            for name in name_val.split("\n"):
+                name = name.strip()
+                if domain in name:
+                    subdomains.add(name)
+
+        logger.debug(f"Retrieved {len(subdomains)} unique subdomains from crt.sh")
 
         if args.output:
-            output.save_results(subdomains, args.output, args.format)
+            output.save_results(list(subdomains), args.output, args.format)
             print(f"[CertTrack] Results saved to: {args.output}")
         else:
-            print("\n".join(subdomains))
+            for sub in sorted(subdomains):
+                print(sub)
 
     except Exception as e:
         print(f"[CertTrack] Error: {e}")
-
-def fetch_crtsh_subdomains(domain, retries=3):
-    url = "https://crt.sh/"
-    params = {
-        "q": f"%.{domain}",
-        "output": "json"
-    }
-    headers = {
-        "User-Agent": "Mozilla/5.0 (GhostPath/2025)"
-    }
-
-    attempt = 0
-    subdomains = set()
-
-    while attempt < retries:
-        try:
-            logger.debug(f"Attempt {attempt + 1} - Querying crt.sh...")
-            response = requests.get(url, headers=headers, params=params, timeout=30)
-            logger.debug(f"HTTP {response.status_code} Response from crt.sh")
-
-            response.raise_for_status()
-            data = response.json()
-
-            for entry in data:
-                name_value = entry.get('name_value', '')
-                for sub in name_value.splitlines():
-                    if sub.endswith(domain):
-                        subdomains.add(sub.strip())
-
-            logger.debug(f"Retrieved {len(subdomains)} unique subdomains from crt.sh.")
-            return list(subdomains)
-
-        except requests.RequestException as e:
-            logger.debug(f"Attempt {attempt + 1} failed: {e}")
-            time.sleep(2 * (attempt + 1))
-
-        attempt += 1
-
-    raise Exception(f"Failed to fetch subdomains from crt.sh after {retries} attempts")
