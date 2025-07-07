@@ -1,4 +1,0 @@
-admin
-login
-uploads
-dashboard
