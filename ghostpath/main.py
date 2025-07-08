@@ -47,30 +47,45 @@ def run_command(command, args):
         if command == "timetrail":
             from modules.passive import timetrail
             parser = timetrail.arg_parser()
+            if "--help" in args or "-h" in args:
+                parser.print_help()
+                return
             parsed_args = parser.parse_args(args)
             timetrail.run(parsed_args)
 
         elif command == "domainscope":
             from modules.active import domainscope
             parser = domainscope.arg_parser()
+            if "--help" in args or "-h" in args:
+                parser.print_help()
+                return
             parsed_args = parser.parse_args(args)
             domainscope.run(parsed_args)
 
         elif command == "pathprobe":
             from modules.active import pathprobe
             parser = pathprobe.arg_parser()
+            if "--help" in args or "-h" in args:
+                parser.print_help()
+                return
             parsed_args = parser.parse_args(args)
             pathprobe.run(parsed_args)
 
         elif command == "certtrack":
             from modules.passive import certtrack
             parser = certtrack.arg_parser()
+            if "--help" in args or "-h" in args:
+                parser.print_help()
+                return
             parsed_args = parser.parse_args(args)
             certtrack.run(parsed_args)
-    except SystemExit:
-        print("[!] Invalid arguments. Type 'help' for usage.")
+
+    except SystemExit as e:
+        if e.code != 0:  # Suppress message on clean --help exit
+            print("[!] Invalid arguments. Type 'help' for usage.")
     except Exception as e:
         print(f"[!] Error: {e}")
+
 
 def main():
     show_banner()
