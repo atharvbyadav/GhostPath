@@ -123,7 +123,6 @@ You’ll see:
   pathprobe      → Actively probe directories and endpoints
   certtrack      → Get subdomains from public SSL/TLS certs
   version        → Show current installed version
-  update         → Reinstall latest GhostPath using pipx
   clear          → Clear the screen
   help           → Show this help menu
   exit           → Exit GhostPath CLI
@@ -205,12 +204,6 @@ Just pass:
 ### Check current version:
 
 ```bash
-GhostPath --version
-```
-
-or
-
-```bash
 ghostpath> version
 ```
 
@@ -219,7 +212,7 @@ ghostpath> version
 ### Reinstall / Update (via pipx):
 
 ```bash
-ghostpath> update
+pipx reinstall GhostPath
 ```
 
 ---
