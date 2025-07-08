@@ -3,14 +3,18 @@
 </h1>
 
 <p align="center">
-  <b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️
+  <H2><b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️</H2>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-active-success?style=flat-square"/>
-  <img src="https://img.shields.io/badge/platform-linux%20|%20wsl-lightgrey?style=flat-square"/>
-  <img src="https://img.shields.io/github/license/atharvbyadav/GhostPath?style=flat-square"/>
-  <img src="https://img.shields.io/github/stars/atharvbyadav/GhostPath?style=flat-square"/>
+  <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/type-Passive%20%2F%20Active%20Recon-yellow" alt="Recon Type">
+  <img src="https://img.shields.io/badge/modules-TimeTrail%20|%20CertTrack%20|%20PathProbe-orange" alt="Modules">
+  <img src="https://img.shields.io/badge/focus-OSINT%20Recon-red" alt="Focus">
+  <img src="https://img.shields.io/badge/debug-Verbose%20Logs%20Available-lightgrey" alt="Debug">
+  <img src="https://img.shields.io/badge/platform-Linux%20|%20WSL%20|%20MacOS-lightgreen" alt="Platform">
+  <img src="https://img.shields.io/badge/status-Under%20Active%20Development-brightgreen" alt="Status">
 </p>
 
 ---
