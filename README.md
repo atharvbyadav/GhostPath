@@ -8,6 +8,8 @@
 </p>
 </H3>
 
+<br>
+
 <p align="center">
   <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
   <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python">
