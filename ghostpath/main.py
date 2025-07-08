@@ -4,7 +4,7 @@ import readline
 import shlex
 import os
 import sys
-
+from ghostpath.version import __version__
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 COMMANDS = ["timetrail", "domainscope", "pathprobe", "certtrack", "clear", "help", "exit", "output", "target", "wordlist", "threads", "format", "debug"]
@@ -36,6 +36,7 @@ def show_help():
   domainscope    → Discover subdomains & DNS profiling
   pathprobe      → Actively probe directories and endpoints
   certtrack      → Get subdomains from public SSL/TLS certs
+  version        → Show current installed version
   clear          → Clear the screen
   help           → Show this help menu
   exit           → Exit GhostPath CLI
@@ -88,12 +89,20 @@ def run_command(command, args):
 
 def main():
     show_banner()
-    print("👻 GhostPath Interactive Recon Shell | Developed by @atharvbyadav \nType 'help' for options\n")
+    print(f"👻 GhostPath Interactive Recon Shell | Developed by @atharvbyadav | Version {__version__} \nType 'help' for options\n")
 
     while True:
         try:
             user_input = input("ghostpath> ").strip()
             if not user_input:
+                continue
+            if user_input in ["--version", "-v", "version"]:
+                print(f"GhostPath version {__version__}")
+                continue
+
+            if user_input == "update":
+                print("[*] Updating GhostPath using pipx...")
+                os.system("pipx reinstall GhostPath")
                 continue
 
             args = shlex.split(user_input)

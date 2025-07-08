@@ -1,295 +1,283 @@
-<h1 align="center">👻 GhostPath — Uncover The Web's Hidden Trails</h1>
+<h1 align="center">
+  <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath.png" alt="GhostPath Logo" width="700"/>
+</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python">
-  <img src="https://img.shields.io/badge/type-Passive%20%2F%20Active%20Recon-yellow" alt="Recon Type">
-  <img src="https://img.shields.io/badge/modules-TimeTrail%20|%20CertTrack%20|%20PathProbe-orange" alt="Modules">
-  <img src="https://img.shields.io/badge/focus-OSINT%20Recon-red" alt="Focus">
-  <img src="https://img.shields.io/badge/debug-Verbose%20Logs%20Available-lightgrey" alt="Debug">
-  <img src="https://img.shields.io/badge/platform-Linux%20|%20WSL%20|%20MacOS-lightgreen" alt="Platform">
-  <img src="https://img.shields.io/badge/status-Under%20Active%20Development-brightgreen" alt="Status">
+  <b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/GhostPath-Recon%20%7C%20OSINT%20%7C%20Modular-blueviolet?style=for-the-badge&logo=ghost" alt="GhostPath Identity Badge">
+  <img src="https://img.shields.io/badge/status-active-success?style=flat-square"/>
+  <img src="https://img.shields.io/badge/platform-linux%20|%20wsl-lightgrey?style=flat-square"/>
+  <img src="https://img.shields.io/github/license/atharvbyadav/GhostPath?style=flat-square"/>
+  <img src="https://img.shields.io/github/stars/atharvbyadav/GhostPath?style=flat-square"/>
 </p>
-
-<p align="center">
-  <em>A modular, powerful, and fully open-source web reconnaissance toolkit built for <strong>ethical hackers</strong>, <strong>OSINT analysts</strong> and <strong>security researchers</strong>.</em>
-</p>
-
-With **GhostPath**, you can **dig through historical URLs**, **hunt down forgotten directories** and **enumerate subdomains from public certificate logs**, all from a single, intuitive CLI interface.
 
 ---
 
-## 🛠️ Installation
+<img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
+
+---
+
+## 🧠 What is GhostPath?
+
+**GhostPath** is a professional-grade CLI reconnaissance toolkit designed for cybersecurity researchers, penetration testers and bug bounty hunters. It provides a modular, extensible and interactive shell to run recon operations in an intuitive and streamlined way.
+
+💡 Powered by Python and focused on speed, clarity and results.
+
+---
+
+## ✨ Features
+
+- 🔍 Interactive hacker-style CLI shell
+- 🔗 Passive and active recon modules
+- 🧩 Modular architecture with shared utilities
+- 📁 Output saving in TXT, JSON, CSV
+- 🚀 Multithreaded path probing with live feedback
+- 🧾 Certificate transparency & subdomain discovery
+- 🌐 Wayback, URLScan and CommonCrawl support
+- 🧠 Built-in wordlist fallback & auto-detection
+- 🔧 `pipx`-installable for global CLI use
+- ✅ `--help`, `--version` and `update` command support
+
+---
+
+## 🚀 Installation (Recommended: pipx)
+
+Use **pipx** for a clean, isolated global installation:
 
 ```bash
-# Clone GhostPath
+# Install pipx (if not already)
+sudo apt install pipx
+pipx ensurepath
+source ~/.bashrc  # or ~/.zshrc
+
+# Clone and install GhostPath
 git clone https://github.com/atharvbyadav/GhostPath.git
 cd GhostPath
+pipx install .
+````
 
-# (Optional but recommended) Create a virtual environment
+### ✅ Run from anywhere:
+
+```bash
+GhostPath
+```
+
+---
+
+## 🐍 Running without pipx (Direct Script Mode)
+
+If you prefer not to use pipx, you can run GhostPath directly using Python:
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/atharvbyadav/GhostPath.git
+cd GhostPath
+```
+
+### 2. (Optional) Create a virtual environment
+
+> Highly recommended to isolate dependencies.
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
-# Install required Python packages
+### 3. Install the dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
----
-
-## 🧭 Usage Overview
+### 4. Run the GhostPath CLI shell
 
 ```bash
-python3 ghostpath/main.py --help
+python3 ghostpath/main.py
 ```
 
-This will list all available modules.
+---
 
-For help on a specific module:
+## 💻 Usage Overview
+
+Once inside the shell:
 
 ```bash
-python3 ghostpath/main.py <module> --help
+ghostpath> help
 ```
 
-Where `<module>` can be:
+You’ll see:
 
-* `timetrail`
-* `certtrack`
-* `pathprobe`
-* *(More coming soon...)*
+```
+🧩 Available GhostPath Commands:
+  timetrail      → Fetch historical URLs from archives (Wayback, URLScan, Common Crawl)
+  domainscope    → Discover subdomains & DNS profiling
+  pathprobe      → Actively probe directories and endpoints
+  certtrack      → Get subdomains from public SSL/TLS certs
+  version        → Show current installed version
+  update         → Reinstall latest GhostPath using pipx
+  clear          → Clear the screen
+  help           → Show this help menu
+  exit           → Exit GhostPath CLI
+```
 
 ---
 
-## 📂 Available Modules
+## 🧩 Modules
 
----
+### 🕰️ `timetrail`
 
-### 🌐 TimeTrail – Historical URL Discovery
+Fetch historical URLs from:
 
-**Dig through web archives and discover past URLs for a target domain.**
-
-**Supported Sources:**
-
+* Common Crawl *(default)*
 * Wayback Machine
 * URLScan.io
-* Common Crawl Index
-
-**Usage:**
 
 ```bash
-python3 ghostpath/main.py timetrail --target <domain> --source <wayback|urlscan|commoncrawl> [options]
+timetrail --target example.com
+timetrail --target example.com --source wayback --output urls.json --format json
 ```
 
-**Flags:**
+---
 
-| Flag       | Description                                      |
-| ---------- | ------------------------------------------------ |
-| `--target` | Target domain (e.g., `example.com`)              |
-| `--source` | Data source: `wayback`, `urlscan`, `commoncrawl` |
-| `--output` | Save results to a file                           |
-| `--format` | Output format: `txt`, `json` or `csv`            |
-| `--debug`  | Enable verbose debug output                      |
+### 🌐 `domainscope`
 
-**Example:**
+Find subdomains and related DNS data.
 
 ```bash
-python3 ghostpath/main.py timetrail --target example.com --source wayback --output urls.txt --debug
+domainscope --target example.com
+domainscope --target example.com --output domains.txt
 ```
 
 ---
 
-### 🔎 CertTrack – Passive Subdomain Enumeration
+### 📜 `certtrack`
 
-**Extract subdomains from public Certificate Transparency logs using crt.sh**
-
-**Usage:**
+Gather subdomains from SSL/TLS certificate transparency logs.
 
 ```bash
-python3 ghostpath/main.py certtrack --target <domain> [options]
+certtrack --target example.com
+certtrack --target example.com --output certs.csv --format csv
 ```
 
-**Flags:**
+---
 
-| Flag       | Description                            |
-| ---------- | -------------------------------------- |
-| `--target` | Target domain (e.g., `example.com`)    |
-| `--output` | Save results to a file                 |
-| `--format` | Output format: `txt`, `json` or `csv`  |
-| `--debug`  | Enable debug output                    |
+### 🔓 `pathprobe`
 
-**Example:**
+Actively probe common paths/endpoints on a web app using HTTP requests.
 
 ```bash
-python3 ghostpath/main.py certtrack --target example.com --format json --debug
+pathprobe --target https://example.com
+pathprobe --target https://example.com --wordlist lists/path-wordlist.txt --output result.json --format json
 ```
+
+> If no wordlist is passed, it will fallback to:
+> `GhostPath/lists/path-wordlist.txt`
 
 ---
 
-### 🛡️ PathProbe – Active Directory & File Brute-Forcing
+## 🧪 Output Formats
 
-**Actively discover hidden directories and files by brute-forcing URL paths.**
+All modules support output saving in:
 
-**Usage:**
+* ✅ `.txt`
+* ✅ `.json`
+* ✅ `.csv`
+
+Just pass:
 
 ```bash
-python3 ghostpath/main.py pathprobe --target <url> --wordlist <file> [options]
+--output filename --format txt|json|csv
 ```
 
-**Flags:**
+---
 
-| Flag         | Description                                         |
-| ------------ | --------------------------------------------------- |
-| `--target`   | Full base URL (e.g., `https://example.com`)         |
-| `--wordlist` | Path to a wordlist file (one path per line)         |
-| `--status`   | HTTP status codes to match (default: `200 301 302`) |
-| `--threads`  | Number of concurrent threads (default: 10)          |
-| `--output`   | Save results to a file                              |
-| `--format`   | Output format: `txt`, `json` or `csv`               |
-| `--debug`    | Enable verbose output                               |
+## 📦 Version & Self-Update
 
-**Example:**
+### Check current version:
 
 ```bash
-python3 ghostpath/main.py pathprobe --target https://example.com --wordlist wordlists/common.txt --status 200 403 --threads 20 --debug
+GhostPath --version
 ```
 
----
-
-### 🛠️ Upcoming Module: DomainScope (Coming Soon 🚧)
-
-**Stay tuned for:**
-
-* WHOIS Lookups
-* Geolocation Data
-* Reverse DNS
-* ASN Details
-* DNS Record Enumeration
-
-*DomainScope will focus on passive metadata footprinting from public internet sources.*
-
----
-
-## 📤 Output Formats
-
-| Format  | Description                                |
-| ------- | ------------------------------------------ |
-| `.txt`  | Simple, newline-separated                  |
-| `.json` | Structured JSON array                      |
-| `.csv`  | Easy-to-import CSV format for spreadsheets |
-
-**Example:**
+or
 
 ```bash
---output results.json --format json
+ghostpath> version
 ```
 
 ---
 
-## 🐞 Debug Mode – See GhostPath Think in Real-Time
-
-GhostPath includes a powerful `--debug` flag for **any module**, giving you:
-
-- ✅ Full API endpoints and request parameters
-- ✅ HTTP status codes and responses
-- ✅ Retry attempt details
-- ✅ Internal decision logs
-
-**Example:**
+### Reinstall / Update (via pipx):
 
 ```bash
-python3 ghostpath/main.py timetrail --target example.com --source urlscan --debug
-```
-
-You’ll get live console feedback like:
-
-```
-[DEBUG] Fetching historical URLs for domain: example.com
-[DEBUG] URLScan API URL: https://urlscan.io/api/v1/search/?q=domain:example.com
-[DEBUG] HTTP 200 Response from URLScan
+ghostpath> update
 ```
 
 ---
 
-## 🔁 Robust Error Handling & Retry Logic
+## 🔒 License
 
-GhostPath handles flaky networks like a champ.
+```text
+BSD 3-Clause License
 
-| Module    | Built-in Retry?              |
-| --------- | ---------------------------- |
-| TimeTrail | ✅ Yes (for all data sources) |
-| CertTrack | ✅ Yes (crt.sh API retries)   |
-| PathProbe | ✅ Yes (per-target retries)   |
-
-✅ Automatic backoff
-✅ Debug logging of failures
-✅ Graceful exit after retry exhaustion
-
----
-
-## 🏗️ Project Structure
-
-```
-GhostPath/
-├── ghostpath/
-│   ├── main.py
-│   ├── modules/
-│   │   ├── passive/
-│   │   │   ├── timetrail.py
-│   │   │   └── certtrack.py
-│   │   ├── active/
-│   │   │   └── pathprobe.py
-│   │   └── shared/
-│   │       ├── logger.py
-│   │       └── output.py
-├── requirements.txt
-└── README.md
+Copyright (c) 2025, Atharv Yadav
+All rights reserved.
 ```
 
----
-
-## 🛣️ Roadmap
-
-✅ Output filtering (keyword, extension based)
-✅ API key-based OSINT plugins
-✅ Batch multi-target scanning
-✅ Exportable JSON schemas for automation
-✅ Proxy support
-
-*Want to contribute? Pull requests are welcome!*
+> 📄 See the [LICENSE](LICENSE) file for full license terms.
 
 ---
 
-## ⚖️ Legal & Ethical Disclaimer
+## 🤝 Contributing
 
-GhostPath is a **research-focused and educational web reconnaissance tool**, developed for **security professionals**, **ethical hackers** and **OSINT researchers**.
+We welcome your pull requests, feature ideas and improvements to make **GhostPath** even better! Here's how to contribute:
 
-By using GhostPath, you agree that:
+1. **Fork** the repository
+2. **Clone** your fork locally:
 
-* ✅ You have **explicit and legal authorization** to scan the target systems or domains.
-* ✅ You will **never use GhostPath for unauthorized, malicious or illegal activities**.
-* ✅ You take **full responsibility** for your actions and their consequences.
+   ```bash
+   git clone https://github.com/yourusername/GhostPath.git
+   cd GhostPath
+   ```
+3. **Create a new branch** for your changes:
 
-> **Reminder:**
-> **Unauthorized scanning is illegal and unethical.
-> Stay professional. Stay responsible. Stay ethical.**
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+4. Make your changes and **commit**:
+
+   ```bash
+   git commit -m "Add: your feature/fix summary"
+   git push origin feature/your-feature
+   ```
+5. Open a **Pull Request** on GitHub 📬
+
+> Please follow best practices and write clear commit messages 🙌
 
 ---
 
 ## 👨‍💻 Author
 
-Built with ❤️ and Python by **Atharv Yadav**
+```bash
+┌─[ Coded with ☕ + ⚡ by Atharv Yadav ]
+│
+├─🛠️  Creator of GhostPath
+├─🌐  https://github.com/atharvbyadav
+└─📧  uuwr5t1s [at] duck [dot] com
+```
 
-🔗 [GitHub – atharvbyadav](https://github.com/atharvbyadav)
+> *"I don’t just scan — I haunt networks."* 👻
+
+<p>
+  🔗 <a href="https://github.com/atharvbyadav" target="_blank">GitHub: @atharvbyadav</a> <br>
+  ✉️ <a href="mailto:uuwr5t1s@duck.com">Email Me</a>
+</p>
 
 ---
 
-## 📜 License
+<p align="center"><i>🕷️ GhostPath — Stealthy. Modular. Effective.</i></p>
 
-GhostPath is distributed under the **BSD 3-Clause License**.
-
-You are free to **use**, **modify** and **redistribute**, provided you comply with the license terms and retain attribution.
-
-For full details, check the [`LICENSE`](./LICENSE) file.
+---

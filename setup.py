@@ -1,8 +1,13 @@
 from setuptools import setup, find_packages
+import os
+
+version = {}
+with open(os.path.join("ghostpath", "version.py")) as f:
+    exec(f.read(), version)
 
 setup(
     name="GhostPath",
-    version="2.3.4",
+    version="2.3.5",
     description="GhostPath - Interactive Recon Shell for Ethical Hackers",
     author="Atharv Yadav",
     packages=find_packages(),
