@@ -1,144 +1,283 @@
-# 🕵️‍♂️ GhostPath — Trace the Web's Forgotten Trails
+<h2 align="center">
+  <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-New.png" alt="GhostPath Logo" width="700"/>
+</h2>
 
-GhostPath is your **silent recon companion** — a **powerful, passive reconnaissance toolkit** that unearths forgotten traces of a target domain without making a sound.
-
-Designed for **ethical hackers, bug bounty hunters and red teams**, GhostPath reveals historical URLs, forgotten subdomains and digital footprints using only **open-source intelligence (OSINT)** techniques — **no API keys required, no noise generated**.
-
-Lightweight, fast and modular, GhostPath helps you map your target’s web shadow — all with just a single command.
-
----
-
-### 🧩 Capabilities at a Glance
+<H3>
+<p align="center">
+  <i><b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️</i>
+</p>
+</H3>
 
 <p align="center">
-  <a href="#">
-    <img alt="Passive Recon" src="https://img.shields.io/badge/Passive_Recon-✔️-brightgreen?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="Subdomain Enumeration" src="https://img.shields.io/badge/Subdomain_Enumeration-✔️-blue?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="Historical URL Discovery" src="https://img.shields.io/badge/Historical_URL_Discovery-✔️-orange?style=for-the-badge" />
-  </a>
-  <a href="#">
-    <img alt="No API Keys Required" src="https://img.shields.io/badge/No_API_Keys_Required-✔️-lightgrey?style=for-the-badge" />
-  </a>
-  <a href="https://www.python.org/downloads/">
-    <img alt="Python 3.7+" src="https://img.shields.io/badge/Python-3.7+-blue.svg?style=for-the-badge&logo=python" />
-  </a>
-  <a href="#">
-    <img alt="Supported OS" src="https://img.shields.io/badge/OS-Linux%20|%20macOS%20|%20Windows-lightgrey.svg?style=for-the-badge" />
-  </a>
-  <a href="https://opensource.org/licenses/BSD-3-Clause">
-    <img alt="License" src="https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge" />
-  </a>
+  <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/python-3.8%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/type-Passive%20%2F%20Active%20Recon-yellow" alt="Recon Type">
+  <img src="https://img.shields.io/badge/modules-TimeTrail%20|%20CertTrack%20|%20PathProbe%20|%20DomainScope-orange" alt="Modules">
+  <img src="https://img.shields.io/badge/focus-OSINT%20Recon-red" alt="Focus">
+  <img src="https://img.shields.io/badge/debug-Verbose%20Logs%20Available-lightgrey" alt="Debug">
+  <img src="https://img.shields.io/badge/platform-Linux%20|%20WSL%20|%20MacOS-lightgreen" alt="Platform">
+  <img src="https://img.shields.io/badge/status-Under%20Active%20Development-brightgreen" alt="Status">
 </p>
 
 ---
 
-## 🚀 Features
+## 🧠 What is GhostPath?
 
-- 🔍 **Passive Reconnaissance:** Gather intelligence without direct interaction with the target.
-- 🌐 **Subdomain Enumeration:** Discover subdomains via multiple sources and APIs.
-- 📜 **Historical URL Discovery:** Fetch archived URLs from Wayback Machine and others.
-- 🔑 **No API Keys Required:** Ready-to-use without any setup hassle.
-- 🧹 **Deduplication:** Removes duplicate URLs and subdomains for clean output.
-- 📦 **Modular Architecture:** Easily extendable with fetchers and utilities.
-- 🐍 **Python 3.7+ Compatible:** Works on all major OS (Linux, macOS, Windows).
-- 🛠️ **CLI Tool:** Simple command-line interface for quick scans.
+**GhostPath** is a professional-grade CLI reconnaissance toolkit designed for cybersecurity researchers, penetration testers and bug bounty hunters. It provides a modular, extensible and interactive shell to run recon operations in an intuitive and streamlined way.
+
+💡 Powered by Python and focused on speed, clarity and results.
 
 ---
-> “Reconnaissance is the foundation of a secure attack and an effective defense.”
-> — *Atharv Yadav*
+
+## ✨ Features
+
+- 🔍 Interactive hacker-style CLI shell
+- 🔗 Passive and active recon modules
+- 🧩 Modular architecture with shared utilities
+- 📁 Output saving in TXT, JSON, CSV
+- 🚀 Multithreaded path probing with live feedback
+- 🧾 Certificate transparency & subdomain discovery
+- 🌐 Wayback, URLScan and CommonCrawl support
+- 🧠 Built-in wordlist fallback & auto-detection
+- 🔧 `pipx`-installable for global CLI use
+- ✅ `--help`, `--version` and `update` command support
+
 ---
 
-## 📦 Installation
+## 🚀 Installation (Recommended: pipx)
+
+Use **pipx** for a clean, isolated global installation:
 
 ```bash
-# Clone the repository
+# Install pipx (if not already)
+sudo apt install pipx
+pipx ensurepath
+source ~/.bashrc  # or ~/.zshrc
+
+# Clone and install GhostPath
 git clone https://github.com/atharvbyadav/GhostPath.git
 cd GhostPath
-
-# (Optional) Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
+pipx install .
 ````
 
----
-
-## ⚙️ Usage
+### ✅ Run from anywhere:
 
 ```bash
-python main.py --domain example.com
+GhostPath
 ```
 
-Replace `example.com` with your target domain.
+---
 
-### Options
+<img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
 
-* `--domain` : Specify the target domain for reconnaissance.
-* `--output` : (Optional) Specify a file to save the results.
-* `--verbose`: Enable detailed output.
+---
 
-*For full options, run:*
+## 🐍 Running without pipx (Direct Script Mode)
+
+If you prefer not to use pipx, you can run GhostPath directly using Python:
+
+### 1. Clone the repository
 
 ```bash
-python main.py --help
+git clone https://github.com/atharvbyadav/GhostPath.git
+cd GhostPath
+```
+
+### 2. (Optional) Create a virtual environment
+
+> Highly recommended to isolate dependencies.
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install the dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the GhostPath CLI shell
+
+```bash
+python3 ghostpath/main.py
 ```
 
 ---
 
-## 📂 Project Structure
+## 💻 Usage Overview
+
+Once inside the shell:
+
+```bash
+ghostpath> help
+```
+
+You’ll see:
 
 ```
-GhostPath/
-├── fetchers/          # Modules to fetch data from different passive sources
-│   ├── subdomains.py  # Subdomain enumeration logic
-│   └── wayback.py     # Historical URL discovery from Wayback Machine
-├── utils/             # Utility modules for deduplication, parsing, etc.
-│   └── dedup.py       # Deduplication functions
-├── main.py            # Main CLI entry point
-├── requirements.txt   # Python dependencies
-└── README.md          # Project documentation
+🧩 Available GhostPath Commands:
+  timetrail      → Fetch historical URLs from archives (Wayback, URLScan, Common Crawl)
+  domainscope    → Discover subdomains & DNS profiling
+  pathprobe      → Actively probe directories and endpoints
+  certtrack      → Get subdomains from public SSL/TLS certs
+  version        → Show current installed version
+  clear          → Clear the screen
+  help           → Show this help menu
+  exit           → Exit GhostPath CLI
 ```
 
 ---
 
-## 🤝 Contributing
+## 🧩 Modules
 
-Contributions are welcome! Please open issues or pull requests for bugs, improvements or new fetchers.
+### 🕰️ `timetrail`
 
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to your branch (`git push origin feature-name`)
-5. Open a Pull Request
+Fetch historical URLs from:
+
+* Common Crawl *(default)*
+* Wayback Machine
+* URLScan.io
+
+```bash
+timetrail --target example.com
+timetrail --target example.com --source wayback --output urls.json --format json
+```
+
+---
+
+### 🌐 `domainscope`
+
+Find subdomains and related DNS data.
+
+```bash
+domainscope --target example.com
+domainscope --target example.com --output domains.txt
+```
+
+---
+
+### 📜 `certtrack`
+
+Gather subdomains from SSL/TLS certificate transparency logs.
+
+```bash
+certtrack --target example.com
+certtrack --target example.com --output certs.csv --format csv
+```
+
+---
+
+### 🔓 `pathprobe`
+
+Actively probe common paths/endpoints on a web app using HTTP requests.
+
+```bash
+pathprobe --target https://example.com
+pathprobe --target https://example.com --wordlist lists/path-wordlist.txt --output result.json --format json
+```
+
+> If no wordlist is passed, it will fallback to:
+> `GhostPath/lists/path-wordlist.txt`
+
+---
+
+## 🧪 Output Formats
+
+All modules support output saving in:
+
+* ✅ `.txt`
+* ✅ `.json`
+* ✅ `.csv`
+
+Just pass:
+
+```bash
+--output filename --format txt|json|csv
+```
+
+---
+
+## 📦 Version & Self-Update
+
+### Check current version:
+
+```bash
+ghostpath> version
+```
+
+---
+
+### Reinstall / Update (via pipx):
+
+```bash
+pipx reinstall GhostPath
+```
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **BSD 3-Clause License** — see the [LICENSE](LICENSE) file for details.
+```text
+BSD 3-Clause License
+
+Copyright (c) 2025, Atharv Yadav
+All rights reserved.
+```
+
+> 📄 See the [LICENSE](LICENSE) file for full license terms.
 
 ---
 
-## 📬 Contact
+## 🤝 Contributing
 
-Have ideas, suggestions, or just want to connect?
+We welcome your pull requests, feature ideas and improvements to make **GhostPath** even better! Here's how to contribute:
 
-- **👨‍💻 Author**: **Atharv Yadav**
-- **📧 Email**: [uuwr5t1s@duck.com](mailto:uuwr5t1s@duck.com)  
-  _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_
-- **🌐 Website**: [atharvbyadav.github.io](https://atharvbyadav.github.io)
-- **🐙 GitHub**: [@atharvbyadav](https://github.com/atharvbyadav)
-- **🧠 Connect**: [LinkedIn](https://www.linkedin.com/in/atharvbyadav/) · [X](https://x.com/AtharvYadavB)
+1. **Fork** the repository
+2. **Clone** your fork locally:
 
-> *Collaboration is the backbone of innovation. Reach out — let’s build better tools together.*
+   ```bash
+   git clone https://github.com/yourusername/GhostPath.git
+   cd GhostPath
+   ```
+3. **Create a new branch** for your changes:
+
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+4. Make your changes and **commit**:
+
+   ```bash
+   git commit -m "Add: your feature/fix summary"
+   git push origin feature/your-feature
+   ```
+5. Open a **Pull Request** on GitHub 📬
+
+> Please follow best practices and write clear commit messages 🙌
 
 ---
 
+## 👨‍💻 Author
 
+```bash
+┌─[ Coded with ☕ + ⚡ by Atharv Yadav ]
+│
+├─🛠️  Creator of GhostPath
+├─🌐  https://github.com/atharvbyadav
+└─📧  uuwr5t1s [at] duck [dot] com
+      { _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_ }
+```
 
+> *"I don’t just scan — I haunt networks."* 👻
+
+<p>
+  🔗 <a href="https://github.com/atharvbyadav" target="_blank">GitHub: @atharvbyadav</a> <br>
+  ✉️ <a href="mailto:uuwr5t1s@duck.com">Email Me</a>
+</p>
+
+---
+
+<p align="center"><i>🕷️ GhostPath — Stealthy. Modular. Effective.</i></p>
+
+---
