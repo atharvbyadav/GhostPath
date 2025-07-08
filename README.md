@@ -266,6 +266,7 @@ We welcome your pull requests, feature ideas and improvements to make **GhostPat
 ├─🛠️  Creator of GhostPath
 ├─🌐  https://github.com/atharvbyadav
 └─📧  uuwr5t1s [at] duck [dot] com
+       _Looks suspicious? Good. It’s mine. The ducks work for me. 🦆💻_
 ```
 
 > *"I don’t just scan — I haunt networks."* 👻
