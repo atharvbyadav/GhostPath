@@ -15,10 +15,6 @@
 
 ---
 
-<img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
-
----
-
 ## 🧠 What is GhostPath?
 
 **GhostPath** is a professional-grade CLI reconnaissance toolkit designed for cybersecurity researchers, penetration testers and bug bounty hunters. It provides a modular, extensible and interactive shell to run recon operations in an intuitive and streamlined way.
@@ -63,6 +59,10 @@ pipx install .
 ```bash
 GhostPath
 ```
+
+---
+
+<img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
 
 ---
 
