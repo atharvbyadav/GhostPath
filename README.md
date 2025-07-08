@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath.png" alt="GhostPath Logo" width="700"/>
+  <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-New.png" alt="GhostPath Logo" width="700"/>
 </h1>
 
 <p align="center">
