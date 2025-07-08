@@ -2,11 +2,11 @@
   <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-New.png" alt="GhostPath Logo" width="700"/>
 </h2>
 
-<H2>
+<H3>
 <p align="center">
-  <b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️
+  <i><b>GhostPath</b> — A Modern Interactive Reconnaissance Toolkit for Hackers & Security Researchers 🕵️‍♂️</i>
 </p>
-</H2>
+</H3>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-BSD%203--Clause-blue.svg" alt="License">
