@@ -5,10 +5,9 @@ import shlex
 import os
 import sys
 
-# Add local ghostpath path to sys
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-COMMANDS = ["timetrail", "domainscope", "pathprobe", "certtrack", "clear", "help", "exit"]
+COMMANDS = ["timetrail", "domainscope", "pathprobe", "certtrack", "clear", "help", "exit", "output", "target", "wordlist", "threads", "format", "debug"]
 
 readline.parse_and_bind("tab: complete")
 readline.set_completer(
@@ -45,16 +44,16 @@ def show_help():
 def run_command(command, args):
     try:
         if command == "timetrail":
-            from modules.passive import timetrail
+            from ghostpath.modules.passive import timetrail
             parser = timetrail.arg_parser()
             if "--help" in args or "-h" in args:
-                parser.print_help()
+                parser.print_help() 
                 return
             parsed_args = parser.parse_args(args)
             timetrail.run(parsed_args)
 
         elif command == "domainscope":
-            from modules.active import domainscope
+            from ghostpath.modules.active import domainscope
             parser = domainscope.arg_parser()
             if "--help" in args or "-h" in args:
                 parser.print_help()
@@ -63,7 +62,7 @@ def run_command(command, args):
             domainscope.run(parsed_args)
 
         elif command == "pathprobe":
-            from modules.active import pathprobe
+            from ghostpath.modules.active import pathprobe
             parser = pathprobe.arg_parser()
             if "--help" in args or "-h" in args:
                 parser.print_help()
@@ -72,7 +71,7 @@ def run_command(command, args):
             pathprobe.run(parsed_args)
 
         elif command == "certtrack":
-            from modules.passive import certtrack
+            from ghostpath.modules.passive import certtrack
             parser = certtrack.arg_parser()
             if "--help" in args or "-h" in args:
                 parser.print_help()
@@ -89,7 +88,7 @@ def run_command(command, args):
 
 def main():
     show_banner()
-    print("👻 GhostPath Interactive Recon Shell | Type 'help' for options\n")
+    print("👻 GhostPath Interactive Recon Shell | Developed by @atharvbyadav \nType 'help' for options\n")
 
     while True:
         try:

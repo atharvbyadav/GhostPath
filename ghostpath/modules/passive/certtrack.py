@@ -4,7 +4,7 @@ import requests
 import json
 import argparse
 import re
-from modules.shared import logger, output
+from ghostpath.modules.shared import logger, output
 
 def arg_parser():
     parser = argparse.ArgumentParser(

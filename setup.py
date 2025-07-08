@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="GhostPath",
-    version="1.0.0",
+    version="2.3.4",
     description="GhostPath - Interactive Recon Shell for Ethical Hackers",
     author="Atharv Yadav",
     packages=find_packages(),

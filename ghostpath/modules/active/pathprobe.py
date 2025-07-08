@@ -1,7 +1,7 @@
 import requests
 import threading
 from queue import Queue
-from modules.shared import logger, output
+from ghostpath.modules.shared import logger, output
 import argparse
 import os
 

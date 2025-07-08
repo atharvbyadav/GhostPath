@@ -4,7 +4,7 @@ import requests
 import time
 import json
 from urllib.parse import urlparse
-from modules.shared import output, logger
+from ghostpath.modules.shared import output, logger
 import argparse
 
 def arg_parser():

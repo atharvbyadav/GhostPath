@@ -2,7 +2,7 @@
 
 import requests
 import json
-from modules.shared import logger, output
+from ghostpath.modules.shared import logger, output
 import argparse
 import re
 

@@ -2,7 +2,7 @@
 
 import json
 import csv
-from modules.shared import logger
+from ghostpath.modules.shared import logger
 
 def save_results(data, output_path, fmt="txt"):
     logger.debug(f"Saving results to '{output_path}' as format: {fmt}")
