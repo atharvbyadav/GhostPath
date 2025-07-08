@@ -217,7 +217,7 @@ pipx reinstall GhostPath
 
 ---
 
-## 🔒 License
+## 📜 License
 
 ```text
 BSD 3-Clause License
