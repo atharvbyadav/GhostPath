@@ -1,5 +1,3 @@
-# ghostpath/modules/passive/certtrack.py
-
 import requests
 import json
 import argparse

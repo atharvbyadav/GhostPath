@@ -5,7 +5,8 @@ from ghostpath.modules.shared import logger, output
 import argparse
 import os
 
-FALLBACK_WORDLIST_NAME = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../lists/path-wordlist.txt"))
+import importlib.resources as pkg_resources
+
 print_lock = threading.Lock()
 
 def arg_parser():
@@ -14,7 +15,7 @@ def arg_parser():
         description="Actively probe endpoints/paths on a target domain using multithreaded HTTP checks"
     )
     parser.add_argument("--target", required=True, help="Target domain (e.g., https://example.com)")
-    parser.add_argument("--wordlist", help="Path to custom wordlist file (default: lists/path-wordlist.txt)")
+    parser.add_argument("--wordlist", help="Path to custom wordlist file (default: ghostpath/data/path-wordlist.txt)")
     parser.add_argument("--threads", type=int, default=10, help="Number of threads (default: 10)")
     parser.add_argument("--output", help="Path to save results")
     parser.add_argument("--format", choices=["json", "txt", "csv"], default="txt", help="Output format")
@@ -30,7 +31,7 @@ def run(args):
 
     wordlist = load_wordlist(args.wordlist)
     if not wordlist:
-        print("[!] No wordlist found. Please provide one using --wordlist or ensure 'lists/path-wordlist.txt' exists.")
+        print("[!] No wordlist found. Provide one with --wordlist or ensure 'path-wordlist.txt' exists in ghostpath/data/")
         return
 
     found_paths = []
@@ -96,11 +97,11 @@ def load_wordlist(path):
             logger.debug(f"Loaded {len(lines)} paths from custom wordlist: {path}")
             return lines
 
-    elif os.path.isfile(FALLBACK_WORDLIST_NAME):
-        with open(FALLBACK_WORDLIST_NAME, "r") as f:
+    try:
+        with pkg_resources.open_text("ghostpath.data", "path-wordlist.txt") as f:
             lines = [line.strip() for line in f if line.strip()]
-            logger.debug(f"Loaded {len(lines)} paths from default wordlist: {FALLBACK_WORDLIST_NAME}")
+            logger.debug("Loaded paths from packaged wordlist in ghostpath.data/path-wordlist.txt")
             return lines
-
-    else:
+    except FileNotFoundError:
+        logger.debug("Failed to find default packaged wordlist")
         return []

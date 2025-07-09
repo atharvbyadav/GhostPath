@@ -1,5 +1,3 @@
-# ghostpath/modules/passive/timetrail.py
-
 import requests
 import time
 import json
@@ -42,7 +40,6 @@ def run(args):
             print("[!] No results found.")
             return
 
-        # Save results to provided output OR auto filename
         filename = args.output
         if not filename:
             filename = f"{args.target}.{args.format}"

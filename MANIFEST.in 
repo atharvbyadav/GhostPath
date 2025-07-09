@@ -1,3 +1,3 @@
 include requirements.txt
 recursive-include ghostpath *
-recursive-include lists *
+recursive-include ghostpath/data *.txt

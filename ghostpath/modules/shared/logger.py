@@ -1,5 +1,3 @@
-# ghostpath/modules/shared/logger.py
-
 import sys
 
 debug_enabled = False
