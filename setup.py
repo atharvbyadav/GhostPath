@@ -7,11 +7,15 @@ with open(os.path.join("ghostpath", "version.py")) as f:
 
 setup(
     name="GhostPath",
-    version="2.3.5",
-    description="GhostPath - Interactive Recon Shell for Ethical Hackers",
+    version="2.3.6",
     author="Atharv Yadav",
-    packages=find_packages(),
+    description="GhostPath - Interactive Recon Shell for Ethical Hackers",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/atharvbyadav/GhostPath",
+    packages=find_packages(include=["ghostpath", "ghostpath.*"]),
     include_package_data=True,
+    package_data={"ghostpath.data": ["*.txt"]},
     install_requires=[
         "requests>=2.31.0",
         "colorama>=0.4.6"
@@ -26,7 +30,7 @@ setup(
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Topic :: Security",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: BSD License",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
 )

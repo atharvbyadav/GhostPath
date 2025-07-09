@@ -101,7 +101,7 @@ pip install -r requirements.txt
 ### 4. Run the GhostPath CLI shell
 
 ```bash
-python3 ghostpath/main.py
+python3 main_cli.py
 ```
 
 ---
