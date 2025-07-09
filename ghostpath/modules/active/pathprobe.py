@@ -31,7 +31,7 @@ def run(args):
 
     wordlist = load_wordlist(args.wordlist)
     if not wordlist:
-        print("[!] No wordlist found. Provide one with --wordlist or ensure 'path-wordlist.txt' exists in ghostpath/data/")
+        print("[!] No wordlist found. Provide one using --wordlist or ensure 'path-wordlist.txt' exists in ghostpath/data/")
         return
 
     found_paths = []
@@ -100,8 +100,8 @@ def load_wordlist(path):
     try:
         with pkg_resources.open_text("ghostpath.data", "path-wordlist.txt") as f:
             lines = [line.strip() for line in f if line.strip()]
-            logger.debug("Loaded paths from packaged wordlist in ghostpath.data/path-wordlist.txt")
+            logger.debug("Loaded paths from packaged wordlist in ghostpath/data/path-wordlist.txt")
             return lines
     except FileNotFoundError:
-        logger.debug("Failed to find default packaged wordlist")
+        logger.debug("Failed to find packaged wordlist ghostpath/data/path-wordlist.txt")
         return []
