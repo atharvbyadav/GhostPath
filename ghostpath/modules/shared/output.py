@@ -1,5 +1,3 @@
-# ghostpath/modules/shared/output.py
-
 import json
 import csv
 from ghostpath.modules.shared import logger

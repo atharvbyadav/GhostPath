@@ -81,7 +81,7 @@ def run_command(command, args):
             certtrack.run(parsed_args)
 
     except SystemExit as e:
-        if e.code != 0:  # Suppress message on clean --help exit
+        if e.code != 0: 
             print("[!] Invalid arguments. Type 'help' for usage.")
     except Exception as e:
         print(f"[!] Error: {e}")

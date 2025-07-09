@@ -1,5 +1,3 @@
-# ghostpath/modules/active/domainscope.py
-
 import requests
 import json
 from ghostpath.modules.shared import logger, output
@@ -30,7 +28,6 @@ def run(args):
 
         all_raw = set(crtsh_subdomains + urlscan_subdomains)
 
-        # Separate into valid subdomains and noisy extras
         valid, noisy = filter_valid_subdomains(all_raw, domain)
         logger.debug(f"Filtered: {len(valid)} valid, {len(noisy)} noisy from {len(all_raw)} total")
 
