@@ -1,5 +1,5 @@
 <h2 align="center">
-  <img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-New.png" alt="GhostPath Logo" width="700"/>
+  <img src="https://raw.githubusercontent.com/atharvbyadav/GhostPath/gh-pages/GhostPath-New.png" alt="GhostPath Logo" width="700"/>
 </h2>
 
 <H3>
@@ -39,6 +39,7 @@
 - 🧾 Certificate transparency & subdomain discovery
 - 🌐 Wayback, URLScan and CommonCrawl support
 - 🧠 Built-in wordlist fallback & auto-detection
+- 🔧 `pip` - installable for users
 - 🔧 `pipx`-installable for global CLI use
 - ✅ `--help`, `--version` and `update` command support
 
@@ -54,10 +55,8 @@ sudo apt install pipx
 pipx ensurepath
 source ~/.bashrc  # or ~/.zshrc
 
-# Clone and install GhostPath
-git clone https://github.com/atharvbyadav/GhostPath.git
-cd GhostPath
-pipx install .
+# Install GhostPath
+pipx install GhostPath
 ````
 
 ### ✅ Run from anywhere:
@@ -66,15 +65,30 @@ pipx install .
 GhostPath
 ```
 
+Use **pip** for easy and quick installation:
+
+```bash
+# install GhostPath
+pip install GhostPath
+```
+
+If your OS does not support direct pip installation, use a virtual environment for installation
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+> Note that if you use a virtual environment you can only use the tool inside that environment. For global use try **pipx**.
+
 ---
 
-<img src="https://github.com/atharvbyadav/GhostPath/blob/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
+<img src="https://raw.githubusercontent.com/atharvbyadav/GhostPath/gh-pages/GhostPath-TerminalLogo.png" alt="GhostPath Terminal Banner" width="100%"/>
 
 ---
 
 ## 🐍 Running without pipx (Direct Script Mode)
 
-If you prefer not to use pipx, you can run GhostPath directly using Python:
+If you prefer not to use pipx or pip, you can run GhostPath directly using Python:
 
 ### 1. Clone the repository
 
