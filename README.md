@@ -29,6 +29,10 @@
 
 ---
 
+<p align="center"><i>🕷️ GhostPath — Stealthy. Modular. Effective.</i></p>
+
+---
+
 ## ✨ Features
 
 - 🔍 Interactive hacker-style CLI shell
@@ -289,9 +293,5 @@ We welcome your pull requests, feature ideas and improvements to make **GhostPat
   🔗 <a href="https://github.com/atharvbyadav" target="_blank">GitHub: @atharvbyadav</a> <br>
   ✉️ <a href="mailto:uuwr5t1s@duck.com">Email Me</a>
 </p>
-
----
-
-<p align="center"><i>🕷️ GhostPath — Stealthy. Modular. Effective.</i></p>
 
 ---
