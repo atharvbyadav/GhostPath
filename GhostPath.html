@@ -1,0 +1,2957 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GhostPath — Reconnaissance Framework</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Bebas+Neue&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            :root {
+                --bg: #030305;
+                --bg2: #07070c;
+                --panel: #0b0b12;
+                --panel2: #0f0f18;
+                --border: #1a1a2a;
+                --border2: #252535;
+                --g: #00ff88;
+                --gd: #00cc6a;
+                --gf: rgba(0, 255, 136, 0.07);
+                --gf2: rgba(0, 255, 136, 0.13);
+                --b: #3d9bff;
+                --r: #ff3a50;
+                --y: #ffc542;
+                --m: #b06fff;
+                --t: #dde0f0;
+                --td: #7a7d9a;
+                --tf: #3a3a55;
+                --mono: "JetBrains Mono", monospace;
+                --display: "Bebas Neue", sans-serif;
+                --sw: 220px;
+                --th: 44px;
+            }
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background: var(--bg);
+                color: var(--t);
+                font-family: var(--mono);
+                font-size: 13px;
+                line-height: 1.6;
+                user-select: none;
+            }
+            ::-webkit-scrollbar {
+                width: 4px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--border2);
+                border-radius: 2px;
+            }
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.12) 2px,
+                    rgba(0, 0, 0, 0.12) 4px
+                );
+                pointer-events: none;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: 0;
+                background-image:
+                    linear-gradient(
+                        rgba(0, 255, 136, 0.018) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(0, 255, 136, 0.018) 1px,
+                        transparent 1px
+                    );
+                background-size: 36px 36px;
+                pointer-events: none;
+            }
+            #shell {
+                position: fixed;
+                inset: 0;
+                z-index: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            /* TOPBAR */
+            #topbar {
+                height: var(--th);
+                background: var(--bg2);
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                padding: 0 16px;
+                gap: 0;
+                flex-shrink: 0;
+                z-index: 10;
+            }
+            .tb-logo {
+                font-family: var(--display);
+                font-size: 22px;
+                letter-spacing: 2px;
+                color: var(--g);
+                line-height: 1;
+                margin-right: 10px;
+            }
+            .tb-ver {
+                font-size: 10px;
+                color: var(--tf);
+                letter-spacing: 1px;
+                padding: 2px 6px;
+                border: 1px solid var(--border);
+                border-radius: 2px;
+                margin-right: 24px;
+            }
+            .tb-path {
+                font-size: 11px;
+                color: var(--td);
+                flex: 1;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .tb-path .sep {
+                color: var(--tf);
+            }
+            .tb-path .crumb {
+                color: var(--g);
+            }
+            .tb-right {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-left: auto;
+            }
+            .tb-dot {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 10px;
+                color: var(--td);
+                letter-spacing: 0.5px;
+            }
+            .tb-dot span {
+                width: 5px;
+                height: 5px;
+                border-radius: 50%;
+                background: var(--g);
+                animation: blink 2s step-end infinite;
+            }
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.2;
+                }
+            }
+            .tb-links {
+                display: flex;
+                gap: 0;
+            }
+            .tb-link {
+                padding: 6px 14px;
+                font-size: 11px;
+                color: var(--td);
+                text-decoration: none;
+                border-left: 1px solid var(--border);
+                letter-spacing: 0.5px;
+                transition:
+                    color 0.2s,
+                    background 0.2s;
+            }
+            .tb-link:hover {
+                color: var(--g);
+                background: var(--gf);
+            }
+            .tb-link:last-child {
+                border-right: 1px solid var(--border);
+            }
+            /* BODY */
+            #body-row {
+                flex: 1;
+                display: flex;
+                overflow: hidden;
+            }
+            /* SIDEBAR */
+            #sidebar {
+                width: var(--sw);
+                background: var(--bg2);
+                border-right: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                flex-shrink: 0;
+                overflow: hidden;
+            }
+            .sl {
+                padding: 16px 14px 6px;
+                font-size: 9px;
+                letter-spacing: 2.5px;
+                text-transform: uppercase;
+                color: var(--tf);
+            }
+            .ni {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 9px 14px;
+                cursor: pointer;
+                transition: background 0.15s;
+                border-left: 2px solid transparent;
+            }
+            .ni:hover {
+                background: rgba(255, 255, 255, 0.03);
+            }
+            .ni.active {
+                background: var(--gf);
+                border-left-color: var(--g);
+            }
+            .ni.active .nl {
+                color: var(--g);
+            }
+            .ni-icon {
+                font-size: 13px;
+                width: 18px;
+                text-align: center;
+                flex-shrink: 0;
+            }
+            .nl {
+                font-size: 11px;
+                color: var(--td);
+                letter-spacing: 0.5px;
+            }
+            .nb {
+                margin-left: auto;
+                font-size: 9px;
+                padding: 1px 5px;
+                border-radius: 2px;
+                background: var(--gf2);
+                color: var(--g);
+                letter-spacing: 0.5px;
+            }
+            .sdiv {
+                height: 1px;
+                background: var(--border);
+                margin: 8px 0;
+            }
+            .sf {
+                margin-top: auto;
+                padding: 14px;
+                border-top: 1px solid var(--border);
+            }
+            .sf p {
+                font-size: 10px;
+                color: var(--tf);
+                line-height: 1.7;
+            }
+            .sf a {
+                color: var(--g);
+                text-decoration: none;
+            }
+            /* MAIN */
+            #main {
+                flex: 1;
+                position: relative;
+                overflow: hidden;
+            }
+            .page {
+                position: absolute;
+                inset: 0;
+                overflow-y: auto;
+                opacity: 0;
+                transform: translateX(14px);
+                pointer-events: none;
+                transition:
+                    opacity 0.22s ease,
+                    transform 0.22s ease;
+            }
+            .page.active {
+                opacity: 1;
+                transform: translateX(0);
+                pointer-events: all;
+            }
+            /* PAGE HEADER */
+            .ph {
+                padding: 28px 40px 22px;
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: flex-end;
+                gap: 24px;
+                background: var(--panel);
+                position: sticky;
+                top: 0;
+                z-index: 5;
+            }
+            .pt-tag {
+                font-size: 9px;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                color: var(--g);
+                margin-bottom: 5px;
+            }
+            .pt-tag::before {
+                content: "// ";
+                color: var(--tf);
+            }
+            .pt-title {
+                font-family: var(--display);
+                font-size: 38px;
+                letter-spacing: 3px;
+                color: var(--t);
+                line-height: 1;
+            }
+            .pt-title em {
+                color: var(--g);
+                font-style: normal;
+            }
+            .pt-desc {
+                font-size: 12px;
+                color: var(--td);
+                max-width: 440px;
+                line-height: 1.7;
+                margin-top: 8px;
+            }
+            .ph-right {
+                margin-left: auto;
+                text-align: right;
+            }
+            .ph-meta {
+                font-size: 10px;
+                color: var(--tf);
+                letter-spacing: 0.5px;
+            }
+            .pb {
+                padding: 28px 40px;
+            }
+            /* SHARED */
+            .g2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .g3 {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 16px;
+            }
+            .g4 {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 16px;
+            }
+            .card {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                overflow: hidden;
+                transition: border-color 0.2s;
+            }
+            .card:hover {
+                border-color: var(--border2);
+            }
+            .card.glow:hover {
+                border-color: rgba(0, 255, 136, 0.3);
+            }
+            .ch {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border);
+                background: var(--panel2);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .ch-t {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--t);
+                letter-spacing: 0.5px;
+            }
+            .cb {
+                padding: 16px;
+            }
+            .tag {
+                display: inline-block;
+                padding: 2px 7px;
+                font-size: 9px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                border-radius: 2px;
+            }
+            .tg {
+                background: rgba(0, 255, 136, 0.1);
+                color: var(--g);
+                border: 1px solid rgba(0, 255, 136, 0.2);
+            }
+            .tb {
+                background: rgba(61, 155, 255, 0.1);
+                color: var(--b);
+                border: 1px solid rgba(61, 155, 255, 0.2);
+            }
+            .ty {
+                background: rgba(255, 197, 66, 0.1);
+                color: var(--y);
+                border: 1px solid rgba(255, 197, 66, 0.2);
+            }
+            .tr {
+                background: rgba(255, 58, 80, 0.1);
+                color: var(--r);
+                border: 1px solid rgba(255, 58, 80, 0.2);
+            }
+            .tm {
+                background: rgba(176, 111, 255, 0.1);
+                color: var(--m);
+                border: 1px solid rgba(176, 111, 255, 0.2);
+            }
+            .code {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                padding: 14px 16px;
+                font-size: 12px;
+                line-height: 2;
+                overflow-x: auto;
+            }
+            .cg {
+                color: var(--g);
+            }
+            .cb2 {
+                color: var(--b);
+            }
+            .cy {
+                color: var(--y);
+            }
+            .cr {
+                color: var(--r);
+            }
+            .cd {
+                color: var(--td);
+            }
+            .cf {
+                color: var(--tf);
+            }
+            .ct {
+                color: var(--t);
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                padding: 8px 16px;
+                font-family: var(--mono);
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                border-radius: 3px;
+                border: none;
+                cursor: pointer;
+                text-decoration: none;
+                transition: all 0.2s;
+            }
+            .btn-p {
+                background: var(--g);
+                color: #000;
+            }
+            .btn-p:hover {
+                filter: brightness(1.1);
+                box-shadow: 0 0 16px rgba(0, 255, 136, 0.3);
+                transform: translateY(-1px);
+            }
+            .btn-o {
+                background: transparent;
+                color: var(--g);
+                border: 1px solid var(--g);
+            }
+            .btn-o:hover {
+                background: var(--gf2);
+            }
+            .btn-ghost {
+                background: transparent;
+                color: var(--td);
+                border: 1px solid var(--border);
+            }
+            .btn-ghost:hover {
+                border-color: var(--border2);
+                color: var(--t);
+            }
+            .kv {
+                display: flex;
+                align-items: baseline;
+                gap: 12px;
+                padding: 7px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 12px;
+            }
+            .kv:last-child {
+                border-bottom: none;
+            }
+            .kv-k {
+                color: var(--td);
+                width: 130px;
+                flex-shrink: 0;
+            }
+            .kv-v {
+                color: var(--t);
+            }
+            .sline {
+                height: 1px;
+                background: linear-gradient(90deg, var(--g), transparent);
+                opacity: 0.2;
+                margin: 20px 0;
+            }
+            .lsm {
+                font-size: 9px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: var(--tf);
+                margin-bottom: 10px;
+            }
+            li {
+                list-style: none;
+            }
+            code {
+                font-family: var(--mono);
+                background: var(--panel2);
+                border: 1px solid var(--border);
+                padding: 1px 5px;
+                border-radius: 2px;
+                font-size: 11px;
+                color: var(--g);
+            }
+            /* STATUSBAR */
+            #sb {
+                height: 24px;
+                background: var(--g);
+                display: flex;
+                align-items: center;
+                padding: 0 16px;
+                gap: 20px;
+                flex-shrink: 0;
+            }
+            .st {
+                font-size: 10px;
+                font-weight: 600;
+                color: #000;
+                letter-spacing: 0.5px;
+            }
+            .ss {
+                color: rgba(0, 0, 0, 0.3);
+                font-size: 12px;
+            }
+            .sr {
+                margin-left: auto;
+            }
+
+            /* === PAGE: HOME === */
+            .hero-split {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                height: calc(100vh - var(--th) - 24px - 97px);
+            }
+            .hl {
+                padding: 36px 40px;
+                border-right: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                overflow-y: auto;
+            }
+            .hr {
+                padding: 28px 32px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background: var(--bg2);
+                overflow-y: auto;
+            }
+            .h-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1px;
+                background: var(--border);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                overflow: hidden;
+                margin-bottom: 22px;
+            }
+            .h-stat {
+                background: var(--panel);
+                padding: 12px 14px;
+                text-align: center;
+            }
+            .h-stat .v {
+                font-family: var(--display);
+                font-size: 22px;
+                letter-spacing: 2px;
+                color: var(--g);
+            }
+            .h-stat .l {
+                font-size: 9px;
+                color: var(--tf);
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                margin-top: 2px;
+            }
+            .chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 7px;
+                margin-top: 20px;
+            }
+            .chip {
+                padding: 3px 9px;
+                background: var(--panel2);
+                border: 1px solid var(--border);
+                border-radius: 2px;
+                font-size: 10px;
+                color: var(--td);
+                letter-spacing: 0.5px;
+            }
+            .mini-term {
+                background: var(--bg);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                overflow: hidden;
+                font-size: 11.5px;
+            }
+            .mt-bar {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 9px 12px;
+                border-bottom: 1px solid var(--border);
+                background: var(--panel2);
+            }
+            .mt-bar .d {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+            }
+            .bt {
+                font-size: 10px;
+                color: var(--tf);
+                margin-left: auto;
+                letter-spacing: 1px;
+            }
+            .mt-body {
+                padding: 16px;
+                line-height: 2.1;
+            }
+
+            /* === PAGE: MODULES === */
+            .mod-pane {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                height: calc(100vh - var(--th) - 24px - 93px);
+            }
+            .ml {
+                border-right: 1px solid var(--border);
+                overflow-y: auto;
+                background: var(--bg2);
+            }
+            .mli {
+                padding: 14px 16px;
+                border-bottom: 1px solid var(--border);
+                cursor: pointer;
+                border-left: 3px solid transparent;
+                transition: background 0.15s;
+            }
+            .mli:hover {
+                background: var(--panel);
+            }
+            .mli.active {
+                background: var(--gf);
+                border-left-color: var(--g);
+            }
+            .mli .mn {
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--t);
+                margin-bottom: 2px;
+            }
+            .mli.active .mn {
+                color: var(--g);
+            }
+            .mli .ms {
+                font-size: 10px;
+                color: var(--td);
+            }
+            .md {
+                overflow-y: auto;
+                padding: 24px 28px;
+                user-select: text;
+            }
+            .mdn {
+                font-family: var(--display);
+                font-size: 34px;
+                letter-spacing: 3px;
+                color: var(--g);
+                line-height: 1;
+                margin-bottom: 4px;
+            }
+            .mdp {
+                font-size: 12px;
+                color: var(--td);
+            }
+            .fr {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 9px 0;
+                border-bottom: 1px solid var(--border);
+            }
+            .fr:last-child {
+                border-bottom: none;
+            }
+            .fa {
+                color: var(--g);
+                font-size: 14px;
+                margin-top: 1px;
+                flex-shrink: 0;
+            }
+            .ft {
+                font-size: 12px;
+                color: var(--td);
+                line-height: 1.6;
+            }
+            .ft strong {
+                color: var(--t);
+                display: block;
+                font-size: 12px;
+            }
+
+            /* === PAGE: ARCH === */
+            .arch-pane {
+                display: grid;
+                grid-template-columns: 1fr 280px;
+                height: calc(100vh - var(--th) - 24px - 93px);
+            }
+            .af {
+                padding: 24px 28px;
+                overflow-y: auto;
+            }
+            .aflow {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                margin: 8px 0 24px;
+            }
+            .an {
+                display: flex;
+                align-items: center;
+                gap: 0;
+                width: 100%;
+            }
+            .abox {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 3px;
+                padding: 10px 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                cursor: default;
+                transition: all 0.2s;
+                flex: 1;
+            }
+            .abox:hover {
+                border-color: rgba(0, 255, 136, 0.4);
+                background: var(--panel2);
+            }
+            .abox:hover .anum {
+                border-color: var(--g);
+                color: var(--g);
+            }
+            .anum {
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                border: 1px solid var(--border2);
+                color: var(--tf);
+                font-size: 10px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                transition: all 0.2s;
+            }
+            .at .fn {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--t);
+            }
+            .at .fd {
+                font-size: 10px;
+                color: var(--tf);
+            }
+            .aconn {
+                height: 18px;
+                border-left: 1px solid var(--border2);
+                margin-left: 43px;
+                display: flex;
+                align-items: center;
+            }
+            .aconn::after {
+                content: "↓";
+                font-size: 10px;
+                color: var(--tf);
+                margin-left: -5px;
+            }
+            .as {
+                border-left: 1px solid var(--border);
+                background: var(--bg2);
+                overflow-y: auto;
+            }
+            .ass {
+                border-bottom: 1px solid var(--border);
+                padding: 16px;
+            }
+            .asl {
+                font-size: 9px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: var(--tf);
+                margin-bottom: 10px;
+            }
+            .pr {
+                padding: 7px 0;
+                border-bottom: 1px dashed var(--border);
+                font-size: 11px;
+                color: var(--td);
+                line-height: 1.5;
+            }
+            .pr:last-child {
+                border-bottom: none;
+            }
+            .pr strong {
+                color: var(--g);
+                display: block;
+                font-size: 11px;
+                margin-bottom: 2px;
+            }
+            .ftree {
+                font-size: 11px;
+                line-height: 2;
+                font-family: var(--mono);
+            }
+            .fd2 {
+                color: var(--y);
+            }
+            .ff {
+                color: var(--td);
+            }
+            .fa2 {
+                color: var(--g);
+            }
+            .fc {
+                color: var(--tf);
+                font-size: 10px;
+            }
+
+            /* === PAGE: INSTALL === */
+            .ig {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+            .ic {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .ich {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border);
+                background: var(--panel2);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .ich h3 {
+                font-size: 11px;
+                color: var(--t);
+                font-weight: 600;
+            }
+            .icb {
+                padding: 16px;
+            }
+            .in {
+                margin-top: 10px;
+                padding: 9px 12px;
+                background: var(--bg);
+                border-left: 2px solid var(--g);
+                font-size: 11px;
+                color: var(--td);
+                line-height: 1.7;
+            }
+            .rt {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11px;
+            }
+            .rt th {
+                text-align: left;
+                padding: 5px 10px;
+                color: var(--tf);
+                letter-spacing: 1px;
+                font-size: 9px;
+                text-transform: uppercase;
+                border-bottom: 1px solid var(--border);
+            }
+            .rt td {
+                padding: 7px 10px;
+                color: var(--td);
+                border-bottom: 1px solid var(--border);
+                vertical-align: top;
+            }
+            .rt td:first-child {
+                color: var(--t);
+                font-weight: 500;
+            }
+            .rt tr:last-child td {
+                border-bottom: none;
+            }
+
+            /* === PAGE: USAGE === */
+            .up {
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                height: calc(100vh - var(--th) - 24px - 93px);
+            }
+            .ul {
+                border-right: 1px solid var(--border);
+                overflow-y: auto;
+                background: var(--bg2);
+            }
+            .uli {
+                padding: 12px 14px;
+                border-bottom: 1px solid var(--border);
+                cursor: pointer;
+                border-left: 3px solid transparent;
+                transition: background 0.15s;
+            }
+            .uli:hover {
+                background: var(--panel);
+            }
+            .uli.active {
+                background: var(--gf);
+                border-left-color: var(--g);
+            }
+            .uli.active .ul2 {
+                color: var(--g);
+            }
+            .ul2 {
+                font-size: 11px;
+                color: var(--td);
+                letter-spacing: 0.5px;
+                font-weight: 500;
+            }
+            .ul3 {
+                font-size: 9px;
+                color: var(--tf);
+                margin-top: 2px;
+            }
+            .uc {
+                overflow-y: auto;
+                padding: 24px 28px;
+                user-select: text;
+            }
+
+            /* === PAGE: LOGGING === */
+            .lc {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .lv {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                padding: 16px;
+                display: flex;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            .lb {
+                font-family: var(--display);
+                font-size: 16px;
+                letter-spacing: 2px;
+                padding: 3px 9px;
+                border-radius: 3px;
+                flex-shrink: 0;
+                line-height: 1.2;
+            }
+            .ld {
+                color: var(--b);
+                background: rgba(61, 155, 255, 0.1);
+                border: 1px solid rgba(61, 155, 255, 0.2);
+            }
+            .li {
+                color: var(--g);
+                background: rgba(0, 255, 136, 0.1);
+                border: 1px solid rgba(0, 255, 136, 0.2);
+            }
+            .lw {
+                color: var(--y);
+                background: rgba(255, 197, 66, 0.1);
+                border: 1px solid rgba(255, 197, 66, 0.2);
+            }
+            .le {
+                color: var(--r);
+                background: rgba(255, 58, 80, 0.1);
+                border: 1px solid rgba(255, 58, 80, 0.2);
+            }
+            .lv .ln {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--t);
+                margin-bottom: 3px;
+            }
+            .lv .ld2 {
+                font-size: 11px;
+                color: var(--td);
+                line-height: 1.6;
+            }
+
+            /* === PAGE: ROADMAP === */
+            .tl {
+                position: relative;
+                padding-left: 26px;
+            }
+            .tl::before {
+                content: "";
+                position: absolute;
+                left: 7px;
+                top: 8px;
+                bottom: 8px;
+                width: 1px;
+                background: var(--border);
+            }
+            .tli {
+                position: relative;
+                margin-bottom: 0;
+                padding: 0 0 0 18px;
+            }
+            .tli::before {
+                content: "";
+                position: absolute;
+                left: -20px;
+                top: 13px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                border: 2px solid var(--border);
+                background: var(--bg);
+            }
+            .tli.done::before {
+                background: var(--g);
+                border-color: var(--g);
+                box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+            }
+            .tli.wip::before {
+                background: var(--y);
+                border-color: var(--y);
+                animation: blink 1s step-end infinite;
+            }
+            .tli.pl::before {
+                background: var(--bg);
+                border-color: var(--tf);
+            }
+            .tc {
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 3px;
+                padding: 12px 14px;
+                margin-bottom: 7px;
+                transition: border-color 0.2s;
+            }
+            .tc:hover {
+                border-color: var(--border2);
+            }
+            .tc-t {
+                font-size: 12px;
+                color: var(--t);
+                font-weight: 600;
+                margin-bottom: 2px;
+            }
+            .tc-d {
+                font-size: 11px;
+                color: var(--td);
+                line-height: 1.6;
+            }
+            .tc-s {
+                float: right;
+                margin-top: -1px;
+            }
+            .leg {
+                display: flex;
+                gap: 16px;
+                font-size: 10px;
+                color: var(--tf);
+            }
+            .leg-i {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .leg-d {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+            }
+
+            /* === PAGE: ETHICS === */
+            .ep {
+                background: rgba(255, 58, 80, 0.04);
+                border: 1px solid rgba(255, 58, 80, 0.2);
+                border-radius: 4px;
+                padding: 26px 30px;
+                max-width: 660px;
+            }
+            .ep-t {
+                font-family: var(--display);
+                font-size: 26px;
+                letter-spacing: 3px;
+                color: var(--r);
+                margin-bottom: 10px;
+            }
+            .ep-b {
+                font-size: 12px;
+                color: var(--td);
+                line-height: 1.9;
+            }
+            .ep-b strong {
+                color: var(--t);
+            }
+            .ep-b a {
+                color: var(--r);
+                text-decoration: none;
+            }
+
+            @media (max-width: 768px) {
+                #sidebar {
+                    display: none;
+                }
+                .hero-split,
+                .mod-pane,
+                .arch-pane,
+                .up,
+                .g2,
+                .g3,
+                .g4,
+                .ig,
+                .lc {
+                    grid-template-columns: 1fr;
+                }
+                .pt-title {
+                    font-size: 26px;
+                }
+                .pb {
+                    padding: 18px;
+                }
+                .mod-pane,
+                .arch-pane,
+                .up {
+                    height: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="shell">
+            <!-- TOPBAR -->
+            <div id="topbar">
+                <div class="tb-logo">GHOSTPATH</div>
+                <div class="tb-ver">v2.x</div>
+                <div class="tb-path">
+                    <span>ghostpath</span><span class="sep">/</span
+                    ><span class="crumb" id="bc">overview</span>
+                </div>
+                <div class="tb-right">
+                    <div class="tb-dot"><span></span>SYSTEM ONLINE</div>
+                    <div class="tb-links">
+                        <a
+                            href="https://pypi.org/project/GhostPath/"
+                            target="_blank"
+                            class="tb-link"
+                            >PyPI ↗</a
+                        >
+                        <a
+                            href="https://github.com/atharvbyadav/GhostPath"
+                            target="_blank"
+                            class="tb-link"
+                            >GitHub ↗</a
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div id="body-row">
+                <!-- SIDEBAR -->
+                <div id="sidebar">
+                    <div class="sl">Navigation</div>
+                    <div class="ni active" data-page="home">
+                        <div class="ni-icon">◈</div>
+                        <div class="nl">Overview</div>
+                    </div>
+                    <div class="ni" data-page="modules">
+                        <div class="ni-icon">⬡</div>
+                        <div class="nl">Modules</div>
+                        <div class="nb">4</div>
+                    </div>
+                    <div class="ni" data-page="architecture">
+                        <div class="ni-icon">⊞</div>
+                        <div class="nl">Architecture</div>
+                    </div>
+                    <div class="ni" data-page="install">
+                        <div class="ni-icon">↓</div>
+                        <div class="nl">Installation</div>
+                    </div>
+                    <div class="ni" data-page="usage">
+                        <div class="ni-icon">▶</div>
+                        <div class="nl">Usage</div>
+                    </div>
+                    <div class="sdiv"></div>
+                    <div class="sl">System</div>
+                    <div class="ni" data-page="logging">
+                        <div class="ni-icon">≡</div>
+                        <div class="nl">Logging</div>
+                    </div>
+                    <div class="ni" data-page="roadmap">
+                        <div class="ni-icon">◎</div>
+                        <div class="nl">Roadmap</div>
+                    </div>
+                    <div class="ni" data-page="ethics">
+                        <div class="ni-icon">⚠</div>
+                        <div class="nl">Ethics</div>
+                    </div>
+                    <div class="sf">
+                        <p>
+                            Built by
+                            <a
+                                href="https://github.com/atharvbyadav"
+                                target="_blank"
+                                >@atharvbyadav</a
+                            ><br />MIT License · Open Source<br /><span
+                                style="color: var(--tf)"
+                                >Python 3.7+</span
+                            >
+                        </p>
+                    </div>
+                </div>
+
+                <!-- MAIN -->
+                <div id="main">
+                    <!-- HOME -->
+                    <div class="page active" id="page-home">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Overview</div>
+                                <div class="pt-title"><em>Ghost</em>Path</div>
+                            </div>
+                            <div class="pt-desc">
+                                A modular, extensible reconnaissance engine for
+                                cybersecurity professionals. Historical URL
+                                intelligence, certificate transparency,
+                                subdomain enumeration — unified.
+                            </div>
+                            <div class="ph-right">
+                                <div class="ph-meta">
+                                    RECONNAISSANCE FRAMEWORK
+                                </div>
+                                <div
+                                    style="
+                                        margin-top: 8px;
+                                        display: flex;
+                                        gap: 8px;
+                                        justify-content: flex-end;
+                                    "
+                                >
+                                    <a
+                                        href="#"
+                                        onclick="
+                                            nav('install');
+                                            return false;
+                                        "
+                                        class="btn btn-p"
+                                        >pip install GhostPath</a
+                                    >
+                                    <a
+                                        href="https://github.com/atharvbyadav/GhostPath"
+                                        target="_blank"
+                                        class="btn btn-o"
+                                        >GitHub ↗</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero-split">
+                            <div class="hl">
+                                <div class="lsm">At a glance</div>
+                                <div class="h-stats">
+                                    <div class="h-stat">
+                                        <div class="v">4</div>
+                                        <div class="l">Modules</div>
+                                    </div>
+                                    <div class="h-stat">
+                                        <div class="v">3</div>
+                                        <div class="l">Sources</div>
+                                    </div>
+                                    <div class="h-stat">
+                                        <div class="v">3</div>
+                                        <div class="l">Formats</div>
+                                    </div>
+                                </div>
+                                <div class="lsm">Why GhostPath exists</div>
+                                <p
+                                    style="
+                                        font-size: 12px;
+                                        color: var(--td);
+                                        line-height: 1.85;
+                                        margin-bottom: 14px;
+                                    "
+                                >
+                                    Traditional URL discovery tools are
+                                    single-purpose scripts with no logging, no
+                                    extensibility and no structured output.
+                                    GhostPath was built to address all three
+                                    failures — a
+                                    <strong style="color: var(--t)"
+                                        >reconnaissance framework</strong
+                                    >, not a one-liner wrapper.
+                                </p>
+                                <p
+                                    style="
+                                        font-size: 12px;
+                                        color: var(--td);
+                                        line-height: 1.85;
+                                        margin-bottom: 22px;
+                                    "
+                                >
+                                    Every module is independently importable,
+                                    centrally logged and outputs consistent
+                                    structured data. It runs standalone or as
+                                    the intelligence engine behind the ReconX
+                                    web platform.
+                                </p>
+                                <div class="lsm">Capabilities</div>
+                                <div class="chips">
+                                    <div class="chip">Wayback Machine</div>
+                                    <div class="chip">URLScan.io</div>
+                                    <div class="chip">Common Crawl</div>
+                                    <div class="chip">crt.sh CT Logs</div>
+                                    <div class="chip">Subdomain Enum</div>
+                                    <div class="chip">Path Probing</div>
+                                    <div class="chip">Tab Completion</div>
+                                    <div class="chip">Debug Logging</div>
+                                    <div class="chip">JSON/CSV/TXT</div>
+                                    <div class="chip">Multithreaded</div>
+                                    <div class="chip">ReconX Ready</div>
+                                    <div class="chip">Retry + Backoff</div>
+                                </div>
+                            </div>
+                            <div class="hr">
+                                <div class="lsm" style="margin-bottom: 12px">
+                                    Interactive shell
+                                </div>
+                                <div class="mini-term">
+                                    <div class="mt-bar">
+                                        <div
+                                            class="d"
+                                            style="background: #ff5f57"
+                                        ></div>
+                                        <div
+                                            class="d"
+                                            style="background: #ffbd2e"
+                                        ></div>
+                                        <div
+                                            class="d"
+                                            style="background: #28c840"
+                                        ></div>
+                                        <div class="bt">
+                                            ghostpath — interactive shell
+                                        </div>
+                                    </div>
+                                    <div class="mt-body">
+                                        <div style="margin-bottom: 10px">
+                                            <img
+                                                src="GhostPath-bg.png"
+                                                alt="GhostPath Logo"
+                                                style="
+                                                    max-width: 100%;
+                                                    height: auto;
+                                                    display: block;
+                                                "
+                                            />
+                                        </div>
+                                        <pre
+                                            style="
+                                                font-family: var(--mono);
+                                                white-space: pre-wrap;
+                                                background: none;
+                                                border: none;
+                                                padding: 0;
+                                                font-size: 11.5px;
+                                                line-height: 2.1;
+                                            "
+                                        ><span class="cd">👻 GhostPath Recon Shell | Developed by @atharvbyadav</span>
+<span class="cd">Type 'help' for options</span>
+
+<span class="cg">ghostpath&gt;</span> <span class="ct">timetrail --target tesla.com --source wayback</span>
+<span class="cd">[TimeTrail] Querying Wayback Machine...</span>
+<span class="cg">[+] 4,231 unique historical URLs discovered</span>
+<span class="cd">[TimeTrail] Results saved to: tesla.com.txt</span>
+<span class="cg">ghostpath&gt;</span> <span class="ct">certtrack --target tesla.com</span>
+<span class="cg">[+] api.tesla.com</span>
+<span class="cg">[+] staging.tesla.com</span>
+<span class="cg">[+] fleet.tesla.com</span>
+<span class="cy">⚠  3 noisy entries filtered</span>
+
+<span class="cg">ghostpath&gt;</span> <span class="ct">pathprobe --target https://tesla.com --threads 20</span>
+<span class="cg">[+] https://tesla.com/admin (200 OK)</span>
+<span class="cy">[→] https://tesla.com/api (301 Redirect)</span>
+<span class="cr">[×] https://tesla.com/.env (403 Forbidden)</span>
+<span class="cd">[PathProbe] 847 paths attempted · 3 found</span>
+
+<span class="cg">ghostpath&gt;</span> <span class="cf">█</span></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MODULES -->
+                    <div class="page" id="page-modules">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Modules</div>
+                                <div class="pt-title">
+                                    Four modules.<br /><em>One engine.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                Passive and Active intelligence gathering,
+                                cleanly separated. Each module owns its arg
+                                parser, its logic, its output — sharing only the
+                                logger and formatter.
+                            </div>
+                        </div>
+                        <div class="mod-pane">
+                            <div class="ml">
+                                <div class="mli active" data-module="timetrail">
+                                    <div class="mn">TimeTrail</div>
+                                    <div class="ms">
+                                        Historical URL Discovery · Passive
+                                    </div>
+                                </div>
+                                <div class="mli" data-module="certtrack">
+                                    <div class="mn">CertTrack</div>
+                                    <div class="ms">
+                                        Certificate Transparency · Passive
+                                    </div>
+                                </div>
+                                <div class="mli" data-module="domainscope">
+                                    <div class="mn">DomainScope</div>
+                                    <div class="ms">
+                                        Subdomain Enumeration · Passive
+                                    </div>
+                                </div>
+                                <div class="mli" data-module="pathprobe">
+                                    <div class="mn">PathProbe</div>
+                                    <div class="ms">
+                                        Path Discovery · Active
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md" id="mod-detail"></div>
+                        </div>
+                    </div>
+
+                    <!-- ARCHITECTURE -->
+                    <div class="page" id="page-architecture">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Architecture</div>
+                                <div class="pt-title">
+                                    Designed for<br /><em>extension.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                Six-layer stack with strict separation of
+                                concerns. CLI parsing never touches core logic.
+                                Logging never mixed with output. Every module
+                                independently importable.
+                            </div>
+                        </div>
+                        <div class="arch-pane">
+                            <div class="af">
+                                <div class="lsm" style="margin-bottom: 14px">
+                                    Execution flow
+                                </div>
+                                <div class="aflow">
+                                    <div class="an">
+                                        <div class="abox">
+                                            <div class="anum">1</div>
+                                            <div class="at">
+                                                <div class="fn">User Input</div>
+                                                <div class="fd">
+                                                    CLI args or interactive
+                                                    shell REPL
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tb"
+                                                style="margin-left: auto"
+                                                >Entry</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="aconn"></div>
+                                    <div class="an">
+                                        <div class="abox">
+                                            <div class="anum">2</div>
+                                            <div class="at">
+                                                <div class="fn">
+                                                    CLI Shell (main.py)
+                                                </div>
+                                                <div class="fd">
+                                                    readline, tab-complete,
+                                                    banner, session state
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tm"
+                                                style="margin-left: auto"
+                                                >Shell</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="aconn"></div>
+                                    <div class="an">
+                                        <div class="abox">
+                                            <div class="anum">3</div>
+                                            <div class="at">
+                                                <div class="fn">
+                                                    Module Dispatcher
+                                                </div>
+                                                <div class="fd">
+                                                    Routes command, invokes
+                                                    arg_parser(), passes parsed
+                                                    args
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag ty"
+                                                style="margin-left: auto"
+                                                >Router</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="aconn"></div>
+                                    <div
+                                        style="
+                                            font-size: 9px;
+                                            letter-spacing: 1.5px;
+                                            text-transform: uppercase;
+                                            color: var(--tf);
+                                            margin: 6px 0 8px 44px;
+                                        "
+                                    >
+                                        Module Layer — independently importable
+                                    </div>
+                                    <div
+                                        style="
+                                            display: grid;
+                                            grid-template-columns: 1fr 1fr;
+                                            gap: 8px;
+                                            width: 100%;
+                                            margin-bottom: 4px;
+                                        "
+                                    >
+                                        <div
+                                            class="abox"
+                                            style="
+                                                border-color: rgba(
+                                                    0,
+                                                    255,
+                                                    136,
+                                                    0.2
+                                                );
+                                            "
+                                        >
+                                            <div class="at">
+                                                <div class="fn cg">
+                                                    TimeTrail
+                                                </div>
+                                                <div class="fd">
+                                                    Wayback · URLScan ·
+                                                    CommonCrawl
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tb"
+                                                style="margin-left: auto"
+                                                >passive</span
+                                            >
+                                        </div>
+                                        <div
+                                            class="abox"
+                                            style="
+                                                border-color: rgba(
+                                                    0,
+                                                    255,
+                                                    136,
+                                                    0.2
+                                                );
+                                            "
+                                        >
+                                            <div class="at">
+                                                <div class="fn cg">
+                                                    CertTrack
+                                                </div>
+                                                <div class="fd">
+                                                    crt.sh CT log parsing
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tb"
+                                                style="margin-left: auto"
+                                                >passive</span
+                                            >
+                                        </div>
+                                        <div
+                                            class="abox"
+                                            style="
+                                                border-color: rgba(
+                                                    255,
+                                                    197,
+                                                    66,
+                                                    0.15
+                                                );
+                                            "
+                                        >
+                                            <div class="at">
+                                                <div class="fn cy">
+                                                    DomainScope
+                                                </div>
+                                                <div class="fd">
+                                                    crt.sh + URLScan
+                                                    multi-source
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag ty"
+                                                style="margin-left: auto"
+                                                >passive</span
+                                            >
+                                        </div>
+                                        <div
+                                            class="abox"
+                                            style="
+                                                border-color: rgba(
+                                                    255,
+                                                    197,
+                                                    66,
+                                                    0.15
+                                                );
+                                            "
+                                        >
+                                            <div class="at">
+                                                <div class="fn cy">
+                                                    PathProbe
+                                                </div>
+                                                <div class="fd">
+                                                    Multithreaded HTTP probing
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag ty"
+                                                style="margin-left: auto"
+                                                >active</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="aconn"></div>
+                                    <div class="an">
+                                        <div class="abox">
+                                            <div class="anum">5</div>
+                                            <div class="at">
+                                                <div class="fn">
+                                                    Shared Logger (stderr)
+                                                </div>
+                                                <div class="fd">
+                                                    Centralized · debug mode
+                                                    toggle · never pollutes
+                                                    stdout
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tr"
+                                                style="margin-left: auto"
+                                                >Shared</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="aconn"></div>
+                                    <div class="an">
+                                        <div class="abox">
+                                            <div class="anum">6</div>
+                                            <div class="at">
+                                                <div class="fn">
+                                                    Output Formatter
+                                                </div>
+                                                <div class="fd">
+                                                    TXT · JSON · CSV —
+                                                    consistent interface across
+                                                    all modules
+                                                </div>
+                                            </div>
+                                            <span
+                                                class="tag tg"
+                                                style="margin-left: auto"
+                                                >Output</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="as">
+                                <div class="ass">
+                                    <div class="asl">Design Principles</div>
+                                    <div class="pr">
+                                        <strong>Separation of concerns</strong
+                                        ><code>arg_parser()</code> never has
+                                        logic. <code>run()</code> never parses
+                                        strings.
+                                    </div>
+                                    <div class="pr">
+                                        <strong>Shared infrastructure</strong
+                                        >Logger and formatter in
+                                        <code>shared/</code>. Zero duplication
+                                        across modules.
+                                    </div>
+                                    <div class="pr">
+                                        <strong>Debug without noise</strong>All
+                                        debug output writes to
+                                        <code>stderr</code>. Stdout stays
+                                        pipeable.
+                                    </div>
+                                    <div class="pr">
+                                        <strong>Dual runtime</strong>Runs
+                                        standalone CLI or embedded inside ReconX
+                                        as a library.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INSTALL -->
+                    <div class="page" id="page-install">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Installation</div>
+                                <div class="pt-title">
+                                    Up in<br /><em>30 seconds.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                Install from PyPI or clone from source. One
+                                dependency. Python 3.7+. Virtual environment
+                                recommended.
+                            </div>
+                        </div>
+                        <div class="pb">
+                            <div class="ig" style="margin-bottom: 16px">
+                                <div class="ic">
+                                    <div class="ich">
+                                        <h3>Install via PyPI</h3>
+                                        <span class="tag tg">Recommended</span>
+                                    </div>
+                                    <div class="icb">
+                                        <div class="code">
+                                            <span class="cf"
+                                                ># Standard install</span
+                                            >
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cg">pip install</span>
+                                            GhostPath
+                                            <br />
+                                            <span class="cf"
+                                                ># Isolated global install
+                                                (preferred)</span
+                                            >
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cg">pipx install</span>
+                                            GhostPath
+                                            <br />
+                                            <span class="cf"># Verify</span>
+                                            <br />
+                                            <span class="cd">$</span> ghostpath
+                                            --version
+                                            <br />
+                                            <span class="cf"
+                                                ># Launch shell</span
+                                            >
+                                            <br />
+                                            <span class="cd">$</span> ghostpath
+                                        </div>
+                                        <div class="in">
+                                            Self-update from inside the shell:
+                                            <code>ghostpath update</code> — runs
+                                            <code
+                                                >pipx reinstall GhostPath</code
+                                            >
+                                            automatically.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ic">
+                                    <div class="ich">
+                                        <h3>Install from Source</h3>
+                                        <span class="tag tb">Development</span>
+                                    </div>
+                                    <div class="icb">
+                                        <div class="code">
+                                            <span class="cd">$</span>
+                                            <span class="cy">git clone</span>
+                                            https://github.com/atharvbyadav/GhostPath.git
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cb2">cd</span>
+                                            GhostPath
+                                            <br />
+                                            <span class="cf"
+                                                ># Virtual environment</span
+                                            >
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cg"
+                                                >python3 -m venv</span
+                                            >
+                                            .venv
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cg">source</span>
+                                            .venv/bin/activate
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cg">pip install</span>
+                                            -r requirements.txt
+                                            <br />
+                                            <span class="cd">$</span>
+                                            <span class="cb2">python</span>
+                                            main_cli.py
+                                        </div>
+                                        <div class="in">
+                                            Sole runtime dependency:
+                                            <code>requests</code>. Zero heavy
+                                            framework dependencies.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ic">
+                                <div class="ich">
+                                    <h3>Requirements</h3>
+                                    <span class="tag ty">Environment</span>
+                                </div>
+                                <div class="icb">
+                                    <table class="rt">
+                                        <thead>
+                                            <tr>
+                                                <th>Requirement</th>
+                                                <th>Version</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Python</td>
+                                                <td>≥ 3.7</td>
+                                                <td>
+                                                    3.10+ recommended for best
+                                                    readline support
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>pip / pipx</td>
+                                                <td>latest</td>
+                                                <td>
+                                                    <code>pipx</code> gives a
+                                                    cleaner isolated global
+                                                    install
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>requests</td>
+                                                <td>≥ 2.28</td>
+                                                <td>
+                                                    Only runtime dependency —
+                                                    auto-installed via pip
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>readline</td>
+                                                <td>stdlib</td>
+                                                <td>
+                                                    Built-in on Linux/macOS.
+                                                    Windows may need
+                                                    <code>pyreadline3</code>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Network</td>
+                                                <td>—</td>
+                                                <td>
+                                                    Outbound HTTPS to Wayback,
+                                                    URLScan, crt.sh, Common
+                                                    Crawl
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- USAGE -->
+                    <div class="page" id="page-usage">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Usage</div>
+                                <div class="pt-title">
+                                    Two modes,<br /><em>full control.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                Interactive REPL for manual recon. Direct CLI
+                                for automation and scripting. All modules share
+                                a consistent argument interface.
+                            </div>
+                        </div>
+                        <div class="up">
+                            <div class="ul">
+                                <div class="uli active" data-usage="shell">
+                                    <div class="ul2">Interactive Shell</div>
+                                    <div class="ul3">
+                                        REPL · tab-complete · history
+                                    </div>
+                                </div>
+                                <div class="uli" data-usage="timetrail">
+                                    <div class="ul2">timetrail</div>
+                                    <div class="ul3">
+                                        Historical URL discovery
+                                    </div>
+                                </div>
+                                <div class="uli" data-usage="certtrack">
+                                    <div class="ul2">certtrack</div>
+                                    <div class="ul3">CT log analysis</div>
+                                </div>
+                                <div class="uli" data-usage="domainscope">
+                                    <div class="ul2">domainscope</div>
+                                    <div class="ul3">Subdomain enumeration</div>
+                                </div>
+                                <div class="uli" data-usage="pathprobe">
+                                    <div class="ul2">pathprobe</div>
+                                    <div class="ul3">Path probing · active</div>
+                                </div>
+                                <div class="uli" data-usage="flags">
+                                    <div class="ul2">Global Flags</div>
+                                    <div class="ul3">
+                                        --debug · --version · update
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uc" id="usage-area"></div>
+                        </div>
+                    </div>
+
+                    <!-- LOGGING -->
+                    <div class="page" id="page-logging">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Logging</div>
+                                <div class="pt-title">
+                                    Auditability<br /><em>by design.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                Centralized logger writes to stderr, keeping
+                                stdout clean for piping. Verbosity toggled
+                                per-invocation with <code>--debug</code>.
+                            </div>
+                        </div>
+                        <div class="pb">
+                            <div class="lc" style="margin-bottom: 16px">
+                                <div class="lv">
+                                    <div class="lb ld">DEBUG</div>
+                                    <div>
+                                        <div class="ln">Verbose trace</div>
+                                        <div class="ld2">
+                                            Every API request URL, params, retry
+                                            attempt, HTTP status, URL parse
+                                            decision, result count. Enable with
+                                            <code>--debug</code>.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lv">
+                                    <div class="lb li">INFO</div>
+                                    <div>
+                                        <div class="ln">Operational</div>
+                                        <div class="ld2">
+                                            Module start events, source
+                                            selected, total results count,
+                                            output file path. Default stdout
+                                            output.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lv">
+                                    <div class="lb lw">WARN</div>
+                                    <div>
+                                        <div class="ln">
+                                            Non-critical alerts
+                                        </div>
+                                        <div class="ld2">
+                                            Noisy entries detected, wildcard
+                                            entries filtered, partial results.
+                                            Program continues.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lv">
+                                    <div class="lb le">ERROR</div>
+                                    <div>
+                                        <div class="ln">Failure events</div>
+                                        <div class="ld2">
+                                            API timeouts, network failures, JSON
+                                            parse errors, unrecoverable
+                                            exceptions.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sline"></div>
+                            <div class="lsm" style="margin-bottom: 10px">
+                                Sample debug trace — stderr stream
+                            </div>
+                            <div
+                                class="code"
+                                style="line-height: 1.9; margin-bottom: 16px"
+                            >
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >Fetching historical URLs for domain:
+                                    tesla.com from source: wayback</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >Wayback API URL:
+                                    https://web.archive.org/cdx/search/cdx</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >Params: {'url': '*.tesla.com/*', 'output':
+                                    'text', 'fl': 'original', 'limit':
+                                    5000}</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >Attempt 1 — Sending request...</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >HTTP 200 Response from Wayback</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cg"
+                                    >Retrieved 4,231 unique URLs from
+                                    Wayback.</span
+                                >
+                                <br />
+                                <span class="cb2">[DEBUG]</span>
+                                <span class="cd"
+                                    >Total unique URLs fetched: 4231</span
+                                >
+                                <br />
+                                <span class="cg"
+                                    >[TimeTrail] Results saved to:
+                                    tesla.com.txt</span
+                                >
+                            </div>
+                            <div class="g2">
+                                <div class="card">
+                                    <div class="ch">
+                                        <div class="ch-t">Why stderr?</div>
+                                    </div>
+                                    <div
+                                        class="cb"
+                                        style="
+                                            font-size: 12px;
+                                            color: var(--td);
+                                            line-height: 1.7;
+                                        "
+                                    >
+                                        Debug output deliberately writes to
+                                        <code>stderr</code>. This keeps
+                                        <code>stdout</code> clean for actual
+                                        results — pipe
+                                        <code
+                                            >ghostpath timetrail ... &gt;
+                                            urls.txt</code
+                                        >
+                                        without log noise corrupting the output
+                                        file.
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="ch">
+                                        <div class="ch-t">Forensic value</div>
+                                    </div>
+                                    <div
+                                        class="cb"
+                                        style="
+                                            font-size: 12px;
+                                            color: var(--td);
+                                            line-height: 1.7;
+                                        "
+                                    >
+                                        During timed engagements or automation,
+                                        <code>--debug 2&gt;audit.log</code>
+                                        captures every API call, retry decision
+                                        and parse result — full reproducible
+                                        audit trail for writeups.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROADMAP -->
+                    <div class="page" id="page-roadmap">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Roadmap</div>
+                                <div class="pt-title">
+                                    Where this<br /><em>is going.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                GhostPath is actively maintained. The roadmap
+                                reflects deeper intelligence coverage, better
+                                automation primitives and broader source
+                                integration.
+                            </div>
+                            <div class="ph-right">
+                                <div class="leg">
+                                    <div class="leg-i">
+                                        <div
+                                            class="leg-d"
+                                            style="
+                                                background: var(--g);
+                                                box-shadow: 0 0 6px
+                                                    rgba(0, 255, 136, 0.4);
+                                            "
+                                        ></div>
+                                        <span style="color: var(--td)"
+                                            >Shipped</span
+                                        >
+                                    </div>
+                                    <div class="leg-i">
+                                        <div
+                                            class="leg-d"
+                                            style="
+                                                background: var(--y);
+                                                animation: blink 1s step-end
+                                                    infinite;
+                                            "
+                                        ></div>
+                                        <span style="color: var(--td)"
+                                            >In Progress</span
+                                        >
+                                    </div>
+                                    <div class="leg-i">
+                                        <div
+                                            class="leg-d"
+                                            style="
+                                                background: var(--bg);
+                                                border: 1px solid var(--tf);
+                                            "
+                                        ></div>
+                                        <span style="color: var(--td)"
+                                            >Planned</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pb">
+                            <div class="g2">
+                                <div>
+                                    <div
+                                        class="lsm"
+                                        style="margin-bottom: 14px"
+                                    >
+                                        Released
+                                    </div>
+                                    <div class="tl">
+                                        <div class="tli done">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    PyPI Package Release
+                                                    <span class="tc-s"
+                                                        ><span class="tag tg"
+                                                            >done</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Global install via pip and
+                                                    pipx. Available at
+                                                    pypi.org/project/GhostPath
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli done">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Interactive CLI Shell
+                                                    <span class="tc-s"
+                                                        ><span class="tag tg"
+                                                            >done</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Full REPL with readline,
+                                                    tab-completion, command
+                                                    history and ASCII banner.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli done">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Multi-Format Output
+                                                    <span class="tc-s"
+                                                        ><span class="tag tg"
+                                                            >done</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    TXT, JSON, CSV — unified
+                                                    interface across all four
+                                                    modules.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli done">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Multi-Source TimeTrail
+                                                    <span class="tc-s"
+                                                        ><span class="tag tg"
+                                                            >done</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Wayback Machine, URLScan.io
+                                                    and Common Crawl all
+                                                    integrated with retry logic.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli done">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Centralized Logger
+                                                    <span class="tc-s"
+                                                        ><span class="tag tg"
+                                                            >done</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    stderr-based structured
+                                                    logging, debug mode toggle,
+                                                    per-invocation verbosity.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        class="lsm"
+                                        style="margin-bottom: 14px"
+                                    >
+                                        Upcoming
+                                    </div>
+                                    <div class="tl">
+                                        <div class="tli wip">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Async Concurrency
+                                                    <span class="tc-s"
+                                                        ><span class="tag ty"
+                                                            >in progress</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Migrating from threading to
+                                                    asyncio. Estimated 5–10x
+                                                    throughput improvement on
+                                                    PathProbe.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli wip">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    ReconX Web Platform
+                                                    <span class="tc-s"
+                                                        ><span class="tag ty"
+                                                            >in progress</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    GhostPath powering a
+                                                    Streamlit-based recon
+                                                    dashboard as backend
+                                                    intelligence engine.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli pl">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Shodan Integration
+                                                    <span class="tc-s"
+                                                        ><span class="tag tm"
+                                                            >planned</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Port, banner and service
+                                                    intelligence layered on top
+                                                    of subdomain enumeration
+                                                    results.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli pl">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    API Server Mode
+                                                    <span class="tc-s"
+                                                        ><span class="tag tm"
+                                                            >planned</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    REST API exposing all
+                                                    modules for programmatic
+                                                    integration with external
+                                                    tooling.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tli pl">
+                                            <div class="tc">
+                                                <div class="tc-t">
+                                                    Distributed Scanning
+                                                    <span class="tc-s"
+                                                        ><span class="tag tm"
+                                                            >planned</span
+                                                        ></span
+                                                    >
+                                                </div>
+                                                <div class="tc-d">
+                                                    Multi-node support for
+                                                    large-scale infrastructure
+                                                    recon with coordinated
+                                                    result merging.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ETHICS -->
+                    <div class="page" id="page-ethics">
+                        <div class="ph">
+                            <div>
+                                <div class="pt-tag">Security &amp; Ethics</div>
+                                <div class="pt-title">
+                                    Authorized<br /><em>testing only.</em>
+                                </div>
+                            </div>
+                            <div class="pt-desc">
+                                GhostPath is built for defensive security,
+                                authorized engagements and bug bounty programs.
+                                Read this before use.
+                            </div>
+                        </div>
+                        <div class="pb">
+                            <div class="g2" style="align-items: start">
+                                <div class="ep">
+                                    <div class="ep-t">⚠ RESPONSIBLE USE</div>
+                                    <div class="ep-b">
+                                        GhostPath is designed for
+                                        <strong
+                                            >defensive security research</strong
+                                        >, authorized penetration testing, bug
+                                        bounty programs and red team engagements
+                                        with
+                                        <strong
+                                            >explicit written permission</strong
+                                        >
+                                        from the target organization.<br /><br />Using
+                                        GhostPath against targets without
+                                        authorization may violate the
+                                        <strong
+                                            >Computer Fraud and Abuse Act
+                                            (CFAA)</strong
+                                        >, GDPR and equivalent laws in your
+                                        jurisdiction.<br /><br /><strong
+                                            >You are solely responsible</strong
+                                        >
+                                        for ensuring your usage complies with
+                                        all applicable laws and your
+                                        organization's policies.<br /><br />The
+                                        author (<a
+                                            href="https://github.com/atharvbyadav"
+                                            target="_blank"
+                                            >@atharvbyadav</a
+                                        >) does not condone or accept any
+                                        responsibility for unauthorized or
+                                        malicious use of this software.
+                                    </div>
+                                </div>
+                                <div
+                                    style="
+                                        display: flex;
+                                        flex-direction: column;
+                                        gap: 14px;
+                                    "
+                                >
+                                    <div class="card glow">
+                                        <div class="ch">
+                                            <div class="ch-t">
+                                                Intended Use Cases
+                                            </div>
+                                            <span class="tag tg"
+                                                >✓ Permitted</span
+                                            >
+                                        </div>
+                                        <div class="cb">
+                                            <div class="kv">
+                                                <div class="kv-k">
+                                                    Bug Bounty
+                                                </div>
+                                                <div class="kv-v">
+                                                    In-scope assets on
+                                                    authorized programs
+                                                </div>
+                                            </div>
+                                            <div class="kv">
+                                                <div class="kv-k">Pentest</div>
+                                                <div class="kv-v">
+                                                    Written authorization from
+                                                    asset owner
+                                                </div>
+                                            </div>
+                                            <div class="kv">
+                                                <div class="kv-k">Red Team</div>
+                                                <div class="kv-v">
+                                                    Contracted engagement with
+                                                    defined scope
+                                                </div>
+                                            </div>
+                                            <div class="kv">
+                                                <div class="kv-k">
+                                                    Own assets
+                                                </div>
+                                                <div class="kv-v">
+                                                    Auditing infrastructure you
+                                                    own or control
+                                                </div>
+                                            </div>
+                                            <div class="kv">
+                                                <div class="kv-k">Research</div>
+                                                <div class="kv-v">
+                                                    Academic or controlled lab
+                                                    environments
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="ch">
+                                            <div class="ch-t">
+                                                Vulnerability Disclosure
+                                            </div>
+                                            <span class="tag tb">Contact</span>
+                                        </div>
+                                        <div
+                                            class="cb"
+                                            style="
+                                                font-size: 12px;
+                                                color: var(--td);
+                                                line-height: 1.7;
+                                            "
+                                        >
+                                            Found a security issue in GhostPath
+                                            itself? Open a confidential issue on
+                                            GitHub or contact via the profile
+                                            linked below. We respond to
+                                            responsible disclosures within 72
+                                            hours.
+                                            <div
+                                                style="
+                                                    margin-top: 12px;
+                                                    display: flex;
+                                                    gap: 8px;
+                                                "
+                                            >
+                                                <a
+                                                    href="https://github.com/atharvbyadav/GhostPath/issues"
+                                                    target="_blank"
+                                                    class="btn btn-ghost"
+                                                    style="
+                                                        font-size: 11px;
+                                                        padding: 6px 12px;
+                                                    "
+                                                    >Open Issue ↗</a
+                                                >
+                                                <a
+                                                    href="https://github.com/atharvbyadav"
+                                                    target="_blank"
+                                                    class="btn btn-ghost"
+                                                    style="
+                                                        font-size: 11px;
+                                                        padding: 6px 12px;
+                                                    "
+                                                    >@atharvbyadav ↗</a
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #main -->
+            </div>
+            <!-- #body-row -->
+
+            <!-- STATUSBAR
+  <div id="sb">
+    <span class="st">GHOSTPATH</span>
+    <span class="ss">|</span>
+    <span class="st" id="sb-page">overview</span>
+    <span class="ss">|</span>
+    <span class="st">@atharvbyadav</span>
+    <div class="sr"><span class="st">MIT LICENSE &nbsp;·&nbsp; PYTHON 3.7+</span></div>
+  </div>
+  -->
+        </div>
+
+        <script>
+            const LABELS = {
+                home: "overview",
+                modules: "modules",
+                architecture: "architecture",
+                install: "installation",
+                usage: "usage",
+                logging: "logging",
+                roadmap: "roadmap",
+                ethics: "ethics",
+            };
+
+            function nav(id) {
+                document
+                    .querySelectorAll(".page")
+                    .forEach((p) => p.classList.remove("active"));
+                const pg = document.getElementById("page-" + id);
+                if (pg) pg.classList.add("active");
+                document
+                    .querySelectorAll(".ni")
+                    .forEach((n) =>
+                        n.classList.toggle("active", n.dataset.page === id),
+                    );
+                const lb = LABELS[id] || id;
+                document.getElementById("bc").textContent = lb;
+                document.getElementById("sb-page").textContent = lb;
+            }
+            document
+                .querySelectorAll(".ni")
+                .forEach((n) =>
+                    n.addEventListener("click", () => nav(n.dataset.page)),
+                );
+
+            /* MODULES */
+            const MODS = {
+                timetrail: {
+                    name: "TimeTrail",
+                    type: "Passive",
+                    tc: "tb",
+                    purpose: "Historical URL Discovery",
+                    desc: "Fetches archived URLs from Wayback Machine, URLScan.io and Common Crawl. Streaming parse with set-based deduplication. Retry logic with exponential backoff on all three sources.",
+                    features: [
+                        {
+                            t: "Wayback Machine CDX API",
+                            d: "Up to 5,000 URLs per query, streamed in chunks. Collapse by urlkey eliminates near-duplicates at the API level before any local processing.",
+                        },
+                        {
+                            t: "URLScan.io Integration",
+                            d: "Domain-scoped search returning up to 1,000 page URLs, filtered against the target domain via hostname-level matching.",
+                        },
+                        {
+                            t: "Common Crawl CC-MAIN",
+                            d: "Large-scale archival index queries. JSON line-by-line parsing extracts URLs from the CC-MAIN-2024 index.",
+                        },
+                        {
+                            t: "Retry + backoff",
+                            d: "All sources retry up to 3 times with exponential sleep (2s, 4s, 6s). Network failures are logged but non-fatal.",
+                        },
+                    ],
+                    src: ["Wayback Machine", "URLScan.io", "Common Crawl"],
+                    cli: `<span class="cd">$</span> ghostpath timetrail
+                --target <span class="cy">example.com</span>
+                --source <span class="cb2">wayback</span>|<span class="cb2">urlscan</span>|<span class="cb2">commoncrawl</span>
+                --format <span class="cg">json</span>|<span class="cg">txt</span>|<span class="cg">csv</span>
+                --output <span class="cy">out.json</span>
+                --debug`,
+                },
+                certtrack: {
+                    name: "CertTrack",
+                    type: "Passive",
+                    tc: "tb",
+                    purpose: "Certificate Transparency Analysis",
+                    desc: "Queries public CT logs via crt.sh to extract subdomains, detect infrastructure leakage and map exposure through SSL certificate transparency records.",
+                    features: [
+                        {
+                            t: "crt.sh wildcard query",
+                            d: "Queries %25.domain (URL-encoded wildcard) to capture all certificate entries including wildcards and multi-SAN certs.",
+                        },
+                        {
+                            t: "Regex-anchored filtering",
+                            d: "Only entries matching a domain-anchored regex pass — no partial matches, no false positives from unrelated domains.",
+                        },
+                        {
+                            t: "Noise quarantine",
+                            d: "Entries with spaces, @ symbols or unrecognized formats are captured in a separate warning list instead of silently dropped.",
+                        },
+                        {
+                            t: "CT log exposure mapping",
+                            d: "Reveals infrastructure that may never appear in DNS — staging environments, internal tooling and legacy subdomains.",
+                        },
+                    ],
+                    src: ["crt.sh CT Logs"],
+                    cli: `<span class="cd">$</span> ghostpath certtrack
+                --target <span class="cy">example.com</span>
+                --format <span class="cg">json</span>|<span class="cg">txt</span>|<span class="cg">csv</span>
+                --output <span class="cy">certs.txt</span>
+                --debug`,
+                },
+                domainscope: {
+                    name: "DomainScope",
+                    type: "Passive",
+                    tc: "tb",
+                    purpose: "Subdomain Enumeration",
+                    desc: "Multi-source passive enumeration combining crt.sh certificate data and URLScan.io DNS intelligence. Results deduplicated, validated and noise-filtered before output.",
+                    features: [
+                        {
+                            t: "Dual-source correlation",
+                            d: "Combines crt.sh and URLScan into a single deduplicated set — each source fills blindspots the other misses.",
+                        },
+                        {
+                            t: "Domain-anchored regex",
+                            d: "Each subdomain validated against a compiled regex anchored to the target domain, preventing off-scope leakage.",
+                        },
+                        {
+                            t: "Noise separation",
+                            d: "Wildcard entries, malformed names and off-scope entries quarantined separately with ⚠️ prefix for manual review.",
+                        },
+                        {
+                            t: "Sorted deterministic output",
+                            d: "Results sorted alphabetically — enables reliable diffing between scans to track new subdomains over time.",
+                        },
+                    ],
+                    src: ["crt.sh", "URLScan.io"],
+                    cli: `<span class="cd">$</span> ghostpath domainscope
+                --target <span class="cy">example.com</span>
+                --format <span class="cg">json</span>|<span class="cg">txt</span>|<span class="cg">csv</span>
+                --output <span class="cy">scope.csv</span>
+                --debug`,
+                },
+                pathprobe: {
+                    name: "PathProbe",
+                    type: "Active",
+                    tc: "ty",
+                    purpose: "Endpoint Discovery",
+                    desc: "Multithreaded HTTP path probing. Bundled wordlists require no external dependency. Color-coded live output distinguishes 200, 301/302 and 403 responses.",
+                    features: [
+                        {
+                            t: "Queue-based threading",
+                            d: "Thread-safe queue distributes paths across configurable worker threads. Default 10, configurable to any value.",
+                        },
+                        {
+                            t: "Bundled wordlists",
+                            d: "path-wordlist.txt is packaged inside the distribution via importlib.resources — works fully offline.",
+                        },
+                        {
+                            t: "Color-coded live output",
+                            d: "🟢 200 OK in green, 🟡 301/302 redirect in yellow, 🔴 403 Forbidden in red. Immediate visual triage.",
+                        },
+                        {
+                            t: "Custom wordlist support",
+                            d: "Pass any wordlist via --wordlist for domain-specific or targeted path discovery beyond the defaults.",
+                        },
+                    ],
+                    src: ["Direct HTTP"],
+                    cli: `<span class="cd">$</span> ghostpath pathprobe
+                --target <span class="cy">https://example.com</span>
+                --threads <span class="cb2">20</span>
+                --wordlist <span class="cy">custom.txt</span>
+                --output <span class="cy">paths.txt</span>
+                --debug`,
+                },
+            };
+
+            function renderMod(id) {
+                const m = MODS[id];
+                document
+                    .querySelectorAll(".mli")
+                    .forEach((el) =>
+                        el.classList.toggle("active", el.dataset.module === id),
+                    );
+                document.getElementById("mod-detail").innerHTML = `
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;">
+                  <div><div class="mdn">${m.name}</div><div class="mdp">${m.purpose}</div></div>
+                  <span class="tag ${m.tc}">${m.type}</span>
+                </div>
+                <p style="font-size:12px;color:var(--td);line-height:1.8;margin-bottom:18px;">${m.desc}</p>
+                <div class="lsm" style="margin-bottom:8px;">Command</div>
+                <div class="code" style="font-size:11.5px;line-height:2;">${m.cli}</div>
+                <div class="lsm" style="margin-bottom:8px;">Sources</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">${m.src.map((s) => `<span class="tag tg">${s}</span>`).join("")}</div>
+                <div class="lsm" style="margin-bottom:10px;">Capabilities</div>
+                <div style="margin-bottom:18px;">${m.features.map((f) => `<div class="fr"><div class="fa">›</div><div class="ft"><strong>${f.t}</strong>${f.d}</div></div>`).join("")}</div>
+                        `;
+            }
+            document
+                .querySelectorAll(".mli")
+                .forEach((el) =>
+                    el.addEventListener("click", () =>
+                        renderMod(el.dataset.module),
+                    ),
+                );
+            renderMod("timetrail");
+
+            /* USAGE */
+            const USAGE = {
+                shell: {
+                    title: "Interactive Shell",
+                    desc: "Launch <code>ghostpath</code> with no arguments to enter the REPL. Tab-completion works across all commands and flags. Command history persists via readline.",
+                    code: `<span class="cd">$</span> ghostpath
+                    <br />
+            <img src="GhostPath-bg.png" alt="GhostPath Logo" style="max-width:100%;height:auto;display:block;margin-bottom:6px;" />
+            <span class="cd">👻 GhostPath Recon Shell | Developed by @atharvbyadav</span>
+            <br />
+            <span class="cd">Type 'help' for options</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">help</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">timetrail --target example.com --source wayback</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">certtrack --target example.com --format json</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">domainscope --target example.com --output subs.txt</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">pathprobe --target https://example.com --threads 20</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">update</span>
+            <br />
+            <span class="cf"># runs pipx reinstall GhostPath</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> <span class="ct">exit</span>`,
+                    note: "The shell keeps state between commands. Tab-complete at any point — command names, flags and module names all complete.",
+                },
+                timetrail: {
+                    title: "timetrail",
+                    desc: "Historical URL discovery. Choose a source, specify the target domain and optionally set output format and file path.",
+                    code: `<span class="cf"># Wayback Machine (up to 5000 URLs)</span>
+                    <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com --source wayback
+            <br />
+            <span class="cf"># URLScan.io (up to 1000 results)</span>
+            <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com --source urlscan
+            <br />
+            <span class="cf"># Common Crawl (large-scale archival)</span>
+            <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com --source commoncrawl
+            <br />
+            <span class="cf"># JSON output to file with debug</span>
+            <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com
+                --source wayback --format json --output urls.json --debug`,
+                    note: "Default source: commoncrawl. Default format: txt. If --output is omitted, results print to stdout for piping.",
+                },
+                certtrack: {
+                    title: "certtrack",
+                    desc: "Query public CT logs via crt.sh. Returns valid subdomains and separately reports noisy/malformed entries.",
+                    code: `<span class="cf"># Basic — prints to stdout</span>
+                    <br />
+            <span class="cd">$</span> ghostpath certtrack --target example.com
+            <br />
+            <span class="cf"># Save to JSON</span>
+            <br />
+            <span class="cd">$</span> ghostpath certtrack --target example.com
+                --format json --output certs.json
+            <br />
+            <span class="cf"># Debug — shows API call + filter decisions</span>
+            <br />
+            <span class="cd">$</span> ghostpath certtrack --target example.com --debug`,
+                    note: "Noisy entries (wildcards, malformed names) are printed as warnings after the main list, not included in the output file.",
+                },
+                domainscope: {
+                    title: "domainscope",
+                    desc: "Multi-source passive subdomain enumeration. Combines crt.sh and URLScan results into a deduplicated, validated list.",
+                    code: `<span class="cf"># Print to stdout</span>
+                    <br />
+            <span class="cd">$</span> ghostpath domainscope --target example.com
+            <br />
+            <span class="cf"># CSV export</span>
+            <br />
+            <span class="cd">$</span> ghostpath domainscope --target example.com
+                --format csv --output scope.csv
+            <br />
+            <span class="cf"># Debug </span>
+            <br />
+            <span class="cd">$</span> ghostpath domainscope --target example.com --debug`,
+                    note: "Output is sorted alphabetically — reliable for diffing between runs to spot newly registered subdomains.",
+                },
+                pathprobe: {
+                    title: "pathprobe",
+                    desc: "Active path probing. Pass the full URL including scheme. Adjust threads for speed vs stealth tradeoffs.",
+                    code: `<span class="cf"># Default — 10 threads, bundled wordlist</span>
+                    <br />
+            <span class="cd">$</span> ghostpath pathprobe --target https://example.com
+            <br />
+            <span class="cf"># Higher thread count</span>
+            <br />
+            <span class="cd">$</span> ghostpath pathprobe --target https://example.com --threads 25
+            <br />
+            <span class="cf"># Custom wordlist</span>
+            <br />
+            <span class="cd">$</span> ghostpath pathprobe --target https://example.com
+                --wordlist /path/to/big.txt --threads 15
+            <br />
+            <span class="cf"># Save results</span>
+            <br />
+            <span class="cd">$</span> ghostpath pathprobe --target https://example.com --output paths.txt`,
+                    note: "⚠️ PathProbe is an active module — it sends real HTTP requests. Only use against targets you are authorized to test.",
+                },
+                flags: {
+                    title: "Global Flags",
+                    desc: "Flags available across the entire tool, not tied to any specific module.",
+                    code: `<span class="cf"># Show version</span>
+                    <br />
+            <span class="cd">$</span> ghostpath --version
+            GhostPath version 2.x.x
+            <br />
+            <span class="cf"># Debug mode — verbose stderr logging</span>
+            <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com --debug
+            <br />
+            <span class="cd">$</span> ghostpath timetrail --target example.com --debug 2&gt;audit.log
+            <br />
+            <span class="cf"># Self-update (inside interactive shell)</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> update
+            <br />
+            <span class="cd">[*] Updating GhostPath using pipx...</span>
+            <br />
+            <span class="cf"># Shell help</span>
+            <br />
+            <span class="cg">ghostpath&gt;</span> help`,
+                    note: "--debug is per-invocation. There is no global config file — all settings are passed as arguments for reproducibility.",
+                },
+            };
+
+            function renderUsage(id) {
+                const u = USAGE[id];
+                document
+                    .querySelectorAll(".uli")
+                    .forEach((el) =>
+                        el.classList.toggle("active", el.dataset.usage === id),
+                    );
+                document.getElementById("usage-area").innerHTML = `
+                <div class="lsm" style="margin-bottom:10px;">${u.title}</div>
+                <p style="font-size:12px;color:var(--td);line-height:1.8;margin-bottom:16px;">${u.desc}</p>
+                <div class="code" style="font-size:11.5px;line-height:2.1;margin-bottom:14px;">${u.code}</div>
+                <div style="padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-left:2px solid var(--g);border-radius:3px;font-size:11px;color:var(--td);line-height:1.7;">${u.note}</div>`;
+            }
+            document
+                .querySelectorAll(".uli")
+                .forEach((el) =>
+                    el.addEventListener("click", () =>
+                        renderUsage(el.dataset.usage),
+                    ),
+                );
+            renderUsage("shell");
+        </script>
+    </body>
+</html>
