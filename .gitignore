@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+.ghostpath/
+.pytest_cache/
+outputs/raw/*.json

@@ -1,107 +1,64 @@
-import requests
-import threading
-from queue import Queue
-from ghostpath.modules.shared import logger, output
+"""Async path probing module."""
+
+from __future__ import annotations
+
 import argparse
-import os
+from pathlib import Path
 
-import importlib.resources as pkg_resources
+import aiohttp
 
-print_lock = threading.Lock()
+from ghostpath.modules.base import build_standard_parser, cli_entry, default_result
+from ghostpath.utils.parsing import ensure_url
 
-def arg_parser():
-    parser = argparse.ArgumentParser(
-        prog="pathprobe",
-        description="Actively probe endpoints/paths on a target domain using multithreaded HTTP checks"
-    )
-    parser.add_argument("--target", required=True, help="Target domain (e.g., https://example.com)")
-    parser.add_argument("--wordlist", help="Path to custom wordlist file (default: ghostpath/data/path-wordlist.txt)")
-    parser.add_argument("--threads", type=int, default=10, help="Number of threads (default: 10)")
-    parser.add_argument("--output", help="Path to save results")
-    parser.add_argument("--format", choices=["json", "txt", "csv"], default="txt", help="Output format")
-    parser.add_argument("--debug", action="store_true", help="Enable verbose debug output")
+
+def arg_parser() -> argparse.ArgumentParser:
+    parser = build_standard_parser("pathprobe", "Actively probe endpoints on a target domain")
+    parser.add_argument("--wordlist", help="Path to custom wordlist file")
     return parser
 
-def run(args):
-    if args.debug:
-        logger.enable_debug()
 
-    target = args.target.rstrip("/")
-    logger.debug(f"Starting path probe on: {target}")
+def _default_wordlist() -> Path:
+    return Path(__file__).resolve().parents[2] / "data" / "path-wordlist.txt"
 
-    wordlist = load_wordlist(args.wordlist)
-    if not wordlist:
-        print("[!] No wordlist found. Provide one using --wordlist or ensure 'path-wordlist.txt' exists in ghostpath/data/")
-        return
 
-    found_paths = []
-    q = Queue()
-    total_attempts = 0
-    total_attempts_lock = threading.Lock()
+def _load_wordlist(path: str | None) -> list[str]:
+    wordlist_path = Path(path) if path else _default_wordlist()
+    with wordlist_path.open("r", encoding="utf-8") as handle:
+        return [line.strip().lstrip("/") for line in handle if line.strip()]
 
-    def worker():
-        nonlocal total_attempts
-        while not q.empty():
-            path = q.get()
-            url = f"{target}/{path}"
-            try:
-                res = requests.get(url, timeout=8)
-                with total_attempts_lock:
-                    total_attempts += 1
-                if res.status_code in [200, 204, 301, 302, 403]:
-                    with print_lock:
-                        if res.status_code == 200:
-                            print(f"\033[92m[+] {url} (200 OK)\033[0m")
-                        elif res.status_code in [301, 302]:
-                            print(f"\033[93m[→] {url} ({res.status_code} Redirect)\033[0m")
-                        elif res.status_code == 403:
-                            print(f"\033[91m[×] {url} (403 Forbidden)\033[0m")
-                        found_paths.append(f"{url} [{res.status_code}]")
-                    logger.debug(f"Found: {url} [{res.status_code}]")
-            except requests.RequestException as e:
-                logger.debug(f"Request failed for {url}: {e}")
-            finally:
-                q.task_done()
 
-    for word in wordlist:
-        q.put(word)
+async def _probe_path(session: aiohttp.ClientSession, semaphore, target: str, path: str) -> str | None:
+    url = f"{target.rstrip('/')}/{path}"
+    async with semaphore:
+        try:
+            async with session.get(url, allow_redirects=False) as response:
+                if response.status in {200, 204, 301, 302, 403}:
+                    return f"{url} [{response.status}]"
+        except aiohttp.ClientError:
+            return None
+    return None
 
-    threads = []
-    for _ in range(args.threads):
-        t = threading.Thread(target=worker)
-        t.start()
-        threads.append(t)
 
-    q.join()
-    for t in threads:
-        t.join()
+async def run(target: str, config: dict | None = None) -> dict:
+    config = config or {}
+    target = ensure_url(target)
+    timeout = int(config.get("timeout", 10))
+    threads = int(config.get("threads", 20))
+    user_agent = str(config.get("user_agent", "GhostPath/3.0"))
+    wordlist = _load_wordlist(config.get("wordlist"))
+    connector = aiohttp.TCPConnector(limit=threads)
+    semaphore = __import__("asyncio").Semaphore(threads)
+    client_timeout = aiohttp.ClientTimeout(total=timeout)
+    async with aiohttp.ClientSession(
+        timeout=client_timeout,
+        headers={"User-Agent": user_agent},
+        connector=connector,
+    ) as session:
+        tasks = [_probe_path(session, semaphore, target, path) for path in wordlist]
+        responses = await __import__("asyncio").gather(*tasks)
+    results = sorted([item for item in responses if item])
+    return default_result("pathprobe", results, {"count": len(results), "attempted": len(wordlist)})
 
-    if not found_paths:
-        print("[!] No valid paths found.")
 
-    print(f"[PathProbe] Attempted {total_attempts} total paths")
-    print(f"[PathProbe] Found {len(found_paths)} valid paths")
-
-    if args.output:
-        clean_urls = [p.split(" [")[0] for p in found_paths]
-        output.save_results(clean_urls, args.output, args.format)
-        print(f"[PathProbe] Results saved to: {args.output}")
-    else:
-        for p in found_paths:
-            print(p)
-
-def load_wordlist(path):
-    if path and os.path.isfile(path):
-        with open(path, "r") as f:
-            lines = [line.strip() for line in f if line.strip()]
-            logger.debug(f"Loaded {len(lines)} paths from custom wordlist: {path}")
-            return lines
-
-    try:
-        with pkg_resources.open_text("ghostpath.data", "path-wordlist.txt") as f:
-            lines = [line.strip() for line in f if line.strip()]
-            logger.debug("Loaded paths from packaged wordlist in ghostpath/data/path-wordlist.txt")
-            return lines
-    except FileNotFoundError:
-        logger.debug("Failed to find packaged wordlist ghostpath/data/path-wordlist.txt")
-        return []
+def cli(args: argparse.Namespace) -> dict:
+    return cli_entry("pathprobe", run, args)

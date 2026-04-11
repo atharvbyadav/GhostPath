@@ -1,0 +1,11 @@
+www
+api
+dev
+test
+staging
+beta
+internal
+cdn
+static
+auth
+admin

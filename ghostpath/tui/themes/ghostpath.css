@@ -1,0 +1,33 @@
+Screen {
+    background: #080b12;
+    color: #d8fff2;
+}
+
+#layout {
+    layout: grid;
+    grid-size: 2 2;
+    grid-columns: 28 1fr;
+    grid-rows: 1fr 12;
+}
+
+#sidebar {
+    border: solid #23f0c7;
+    background: #0d1524;
+}
+
+#main-panel {
+    border: solid #7ef9ff;
+    background: #101827;
+}
+
+#log-panel {
+    column-span: 2;
+    border: solid #9b5cff;
+    background: #0b1020;
+}
+
+#stats {
+    dock: bottom;
+    height: 4;
+    border-top: solid #23f0c7;
+}

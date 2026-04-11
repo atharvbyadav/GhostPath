@@ -35,17 +35,18 @@
 
 ## ✨ Features
 
-- 🔍 Interactive hacker-style CLI shell
-- 🔗 Passive and active recon modules
-- 🧩 Modular architecture with shared utilities
-- 📁 Output saving in TXT, JSON, CSV
-- 🚀 Multithreaded path probing with live feedback
+- 🖥️ Textual-powered TUI dashboard with live logs, stats and result tables
+- 🔗 Passive, active, intelligence and discovery recon modules
+- 🧩 Modular plugin architecture with automatic module loading
+- 📁 Output saving in JSON, CSV, HTML and raw session snapshots
+- 🚀 Async path probing, JS fetching and directory brute forcing
 - 🧾 Certificate transparency & subdomain discovery
 - 🌐 Wayback, URLScan and CommonCrawl support
-- 🧠 Built-in wordlist fallback & auto-detection
+- 🧠 New ParamMiner, JSIntel, DirBrute, TechDetect and subdomain permutation modules
+- 💾 Session persistence and export workflows
 - 🔧 `pip` - installable for users
 - 🔧 `pipx`-installable for global CLI use
-- ✅ `--help`, `--version` and `update` command support
+- ✅ `--help`, `--version`, module CLI compatibility and structured exports
 
 ---
 
@@ -116,34 +117,52 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Run the GhostPath CLI shell
+### 4. Run the GhostPath dashboard
 
 ```bash
 python3 main_cli.py
 ```
 
+This launches the GhostPath v3.0 TUI dashboard by default.
+
 ---
 
-## 💻 Usage Overview
+## 💻 TUI Usage
 
-Once inside the shell:
+Run:
 
 ```bash
-ghostpath> help
+ghostpath
 ```
 
-You’ll see:
+Keyboard shortcuts:
 
-```
-🧩 Available GhostPath Commands:
-  timetrail      → Fetch historical URLs from archives (Wayback, URLScan, Common Crawl)
-  domainscope    → Discover subdomains & DNS profiling
-  pathprobe      → Actively probe directories and endpoints
-  certtrack      → Get subdomains from public SSL/TLS certs
-  version        → Show current installed version
-  clear          → Clear the screen
-  help           → Show this help menu
-  exit           → Exit GhostPath CLI
+- `TAB` switch panels
+- `ENTER` run selected module
+- `S` save current session
+- `E` export the latest results
+- `R` rerun the selected module
+- `Q` quit
+- `/` focus the target/search input
+
+The TUI includes:
+
+- module sidebar
+- live result table
+- log stream with levels
+- status and summary stats panels
+
+---
+
+## 💻 CLI Usage Overview
+
+Existing command-style usage remains supported:
+
+```bash
+ghostpath timetrail example.com
+ghostpath domainscope example.com
+ghostpath pathprobe https://example.com --threads 50
+ghostpath certtrack example.com --output certs.json --format json
 ```
 
 ---
@@ -201,18 +220,86 @@ pathprobe --target https://example.com --wordlist lists/path-wordlist.txt --outp
 
 ---
 
+### 🧪 `paramminer`
+
+Extract parameters from wayback URLs, JavaScript files and HTML forms:
+
+```bash
+ghostpath paramminer example.com
+```
+
+---
+
+### 🧠 `jsintel`
+
+Extract endpoints, tokens, secrets and internal domains from JavaScript:
+
+```bash
+ghostpath jsintel https://example.com
+```
+
+---
+
+### 📂 `dirbrute`
+
+Asynchronously brute force common directories:
+
+```bash
+ghostpath dirbrute https://example.com
+```
+
+---
+
+### 🧬 `sub_permuter`
+
+Generate likely subdomain permutations:
+
+```bash
+ghostpath sub_permuter example.com
+```
+
+---
+
+### 🧱 `techdetect`
+
+Detect common server, framework, CMS and CDN indicators:
+
+```bash
+ghostpath techdetect https://example.com
+```
+
+---
+
 ## 🧪 Output Formats
 
 All modules support output saving in:
 
-* ✅ `.txt`
 * ✅ `.json`
 * ✅ `.csv`
+* ✅ `.html`
+* ✅ raw session snapshots
 
 Just pass:
 
 ```bash
---output filename --format txt|json|csv
+--output filename --format json|csv|html|txt
+```
+
+Export an existing session or JSON payload:
+
+```bash
+ghostpath export outputs/raw/session_example.com_latest.json --format html
+```
+
+---
+
+## 💾 Sessions
+
+Save and load the latest session for a target:
+
+```bash
+ghostpath session save example.com
+ghostpath session load example.com
 ```
 
 ---

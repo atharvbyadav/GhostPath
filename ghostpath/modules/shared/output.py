@@ -1,29 +1,29 @@
-import json
-import csv
-from ghostpath.modules.shared import logger
+"""Legacy output adapter."""
 
-def save_results(data, output_path, fmt="txt"):
-    logger.debug(f"Saving results to '{output_path}' as format: {fmt}")
+from __future__ import annotations
 
-    try:
-        if fmt == "txt":
-            with open(output_path, "w") as f:
-                for item in data:
-                    f.write(f"{item}\n")
+from pathlib import Path
 
-        elif fmt == "json":
-            with open(output_path, "w") as f:
-                json.dump(list(data), f, indent=2)
+from ghostpath.core.exporter import export_csv, export_html, export_json
 
-        elif fmt == "csv":
-            with open(output_path, "w", newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(["URL"])
-                for item in data:
-                    writer.writerow([item])
 
-        logger.debug(f"Successfully saved output to: {output_path}")
-
-    except Exception as e:
-        logger.debug(f"Failed to save output: {e}")
-        print(f"[!] Error saving results to file: {e}")
+def save_results(data, output_path: str, fmt: str = "txt") -> None:
+    payload = {
+        "target": "legacy",
+        "timestamp": "legacy",
+        "modules": ["legacy"],
+        "results": [{"module": "legacy", "results": list(data), "metadata": {}}],
+    }
+    path = Path(output_path)
+    if fmt == "json":
+        export_json(payload, path)
+        return
+    if fmt == "csv":
+        export_csv(payload, path)
+        return
+    if fmt == "html":
+        export_html(payload, path)
+        return
+    with path.open("w", encoding="utf-8") as handle:
+        for item in data:
+            handle.write(f"{item}\n")

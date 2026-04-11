@@ -1,0 +1,12 @@
+admin
+login
+dashboard
+api
+uploads
+backup
+static
+assets
+health
+metrics
+graphql
+debug
